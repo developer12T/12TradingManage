@@ -4,6 +4,9 @@ import LoginView from '../views/login/login.vue'
 import Zort from '../views/zort/index_zort.vue'
 import ZortStock from '../views/zort/stock.vue'
 import ZortOrderInv from '../views/zort/orderInv.vue'
+
+import ZortOrderAll from '../views/zort/orderAll.vue'
+import ZortOrderRec from '../views/zort/orderInvRec.vue'
 import pdf2vue from '../views/print/recipt.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +35,16 @@ const router = createRouter({
       path: '/orderinv',
       name: 'orderinv',
       component: ZortOrderInv
+    },
+    {
+      path: '/orderall',
+      name: 'orderall',
+      component: ZortOrderAll
+    },
+    {
+      path: '/orderRec',
+      name: 'orderRec',
+      component: ZortOrderRec
     },
     {
       path: '/pdf',
