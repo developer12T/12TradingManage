@@ -68,22 +68,25 @@
           <ul id="dropdownOrder" class="hidden py-2 space-y-2">
             <li>
               <a
-                href="/order"
+                href="/order/all"
                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                @click="setPage('all')"
                 >ทั้งหมด</a
               >
             </li>
             <li>
               <a
-                href="#"
+                href="/order/inv"
                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                @click="setPage('inv')"
                 >พิมพ์ใบกำกับภาษี</a
               >
             </li>
             <li>
               <a
-                href="#"
+                href="/order/reciept"
                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                @click="setPage('recipt')"
                 >พิมพ์ใบเสร็จ</a
               >
             </li>
@@ -131,16 +134,14 @@
               <a
                 href="/stock/zort"
                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                :class="classObject"
-                >สต็อกจาก Zort</a
+                >Zort</a
               >
             </li>
             <li>
               <a
                 href="/stock/erp"
                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                :class="classObject"
-                >สต็อกจาก ERP</a
+                >ERP</a
               >
             </li>
           </ul>
@@ -158,11 +159,8 @@ onMounted(() => {
   initCollapses();
   initDrawers();
 });
-const isActive = ref(true)
-const error = ref(null)
-
-const classObject = computed(() => ({
-  active: isActive.value && !error.value,
-  'text-danger': error.value && error.value.type === 'fatal'
-}))
+function setPage(pageName) {
+  localStorage.setItem('orderPage', pageName);
+  // console.log("pagename", pageName);
+}
 </script>
