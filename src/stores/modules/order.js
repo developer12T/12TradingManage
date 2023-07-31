@@ -13,7 +13,10 @@ export const useOrderStore = defineStore('order', {
         try {
           const token = JSON.parse(localStorage.getItem('token'))
           const reponse = await axios.post(
-            import.meta.env.VITE_API_BASE_URL+'/zort/order/OrderManage/getOrder',{},
+            import.meta.env.VITE_API_BASE_URL+'/zort/rest12Tzort/12Trading/getOrder',{
+            // import.meta.env.VITE_API_BASE_URL+'/zort/order/OrderManage/getOrder',{
+              page:"all"
+            },
             {
               headers: { Authorization: `Bearer ${token}`},
             }
