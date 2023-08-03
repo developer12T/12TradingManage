@@ -1,7 +1,18 @@
 <template>
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
-      <SearchBar :searchBar="textInput" @search="handleSearch" />
+      <div
+        class="flex justify-between flex-col mb-2 sm:flex-row sm:items-center"
+      >
+        <a
+          :href="'http://58.181.206.156:8080/12Trading/zort_pdf/order.php?checklist='+selected"
+          target="_blank"
+          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-5 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+        >
+          พิมพ์ใบเสร็จ
+      </a>
+        <SearchBar :searchBar="textInput" @search="handleSearch" />
+      </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table
           class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
@@ -10,6 +21,14 @@
             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
+              <th class="px-6 py-3">
+                <input
+                  type="checkbox"
+                  :checked="selectAll"
+                  @change="setSelectAll($event.target.checked)"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+              </th>
               <th
                 v-for="title in tbHeader"
                 :key="title.title"
@@ -26,16 +45,21 @@
               :key="order.id"
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
-              <!-- ตรงนี้ถ้าจะเปลี่ยน obj ที่จะแสดง -->
-
-              <td class="px-6 py-4">{{ order.orderdate }}</td>
+              <td class="px-6 py-4">
+                <input
+                  type="checkbox"
+                  v-model="selected"
+                  :value="order.id"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+              </td>
+              <td class="px-6 py-4">{{ order.orderdateString }}</td>
               <td class="px-6 py-4">{{ order.number }}</td>
-              <!-- <td class="px-6 py-4">{{ order.customername }}</td> -->
-              <td class="px-6 py-4">{{ order.customerid }}</td>
+              <td class="px-6 py-4">{{ order.customer }}</td>
               <td class="px-6 py-4">{{ order.amount }}</td>
               <td class="px-6 py-4">{{ order.status }}</td>
               <td class="px-6 py-4">{{ order.paymentstatus }}</td>
-              <td class="px-6 py-4">{{ order.saleschannel }}</td> 
+              <td class="px-6 py-4">{{ order.saleschannel }}</td>
             </tr>
           </tbody>
         </table>
@@ -51,8 +75,8 @@
 </template>
 
 <script>
-import { onMounted, computed, ref } from "vue";
-import { useAuthStore, useOrderStore } from "../../stores";
+import { onMounted, computed, ref, watch } from "vue";
+import { useAuthStore, useOrderStore, useUtilityStore } from "../../stores";
 import router from "../../router";
 import SearchBar from "../../components/searchbar.vue";
 import Pagination from "../../components/pagination.vue";
@@ -83,8 +107,8 @@ export default {
       return orders.value.filter(
         (item) =>
           item.number.toLowerCase().includes(keyword) ||
-          item.customername.toLowerCase().includes(keyword) ||
-          item.orderdate.toLowerCase().includes(keyword) ||
+          item.customer.toLowerCase().includes(keyword) ||
+          item.orderdateString.toLowerCase().includes(keyword) ||
           item.saleschannel.toLowerCase().includes(keyword)
       );
     });
@@ -120,8 +144,35 @@ export default {
     });
     // pagination end
 
-    // ตรงนี้จะเป็นการเรียก getOrderZort จาก store useOrderStore ทุกครั้งที่มีการเรียกใช้ component นี้
-    console.log("orders", orders);
+    // checkbox start
+    const checkboxStore = useUtilityStore();
+    const selected = computed({
+      get: () => checkboxStore.selectedCheckboxes,
+      set: (value) => checkboxStore.updateSelectedCheckboxes(value),
+    });
+
+    const selectAll = computed(() => {
+      return paginatedData.value
+        ? selected.length === paginatedData.value.length
+        : false;
+    });
+
+    const setSelectAll = (value) => {
+      const selectedId = [];
+      if (value) {
+        paginatedData.value.forEach((item) => {
+          selectedId.push(item.id);
+        });
+      }
+      selected.value = selectedId;
+    };
+
+    watch(selected, (newValue) => {
+      console.log("Selected ID:", selected.value);
+    });
+
+    // checkbox end
+
     onMounted(() => {
       store.getOrderZort();
     });
@@ -145,9 +196,10 @@ export default {
       totalPages,
       paginatedData,
       onPageChange,
+      selected,
+      selectAll,
+      setSelectAll,
     };
   },
 };
 </script>
-
-<style></style>
