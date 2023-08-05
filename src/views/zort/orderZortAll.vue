@@ -1,29 +1,11 @@
 <template>
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
-      <div
-        class="flex justify-between flex-col mb-2 sm:flex-row sm:items-center"
-      >
-        <a
-          :href="
-            'http://58.181.206.156:8080/12Trading/zort_pdf/printReceipt.php?checklist=' +
-            selected
-          "
-          target="_blank"
-          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-5 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
-          :class="{ 'pointer-events-none': !isItemSelected }"
-        >
-          พิมพ์ใบเสร็จ
-        </a>
+      <div class="flex justify-end flex-col mb-2 sm:flex-row sm:items-center">
         <SearchBar :searchBar="textInput" @search="handleSearch" />
       </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <TableCheckbox
-          :columns="tableColumns"
-          :data="filteredItems"
-          :selected="selected"
-          @update:selected="onSelectedUpdate"
-        >
+        <Table :columns="tableColumns" :data="paginatedData">
           <template v-slot:status="{ row }">
             <div class="flex items-center justify-center">
               <span
@@ -35,12 +17,6 @@
               <span
                 v-if="row.status === 'Pending'"
                 class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
-              >
-                {{ row.status }}
-              </span>
-              <span
-                v-if="row.status === 'Voided'"
-                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
               >
                 {{ row.status }}
               </span>
@@ -57,12 +33,6 @@
               <span
                 v-if="row.paymentstatus === 'Pending'"
                 class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
-              >
-                {{ row.paymentstatus }}
-              </span>
-              <span
-                v-if="row.paymentstatus === 'Voided'"
-                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
               >
                 {{ row.paymentstatus }}
               </span>
@@ -85,32 +55,32 @@
               <span :title="row.saleschannel">{{ row.saleschannel }}</span>
             </div>
           </template>
-        </TableCheckbox>
+        </Table>
       </div>
     </div>
+    <Pagination
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      :itemsPerPage="itemsPerPage"
+      @page-changed="onPageChange"
+    />
   </div>
 </template>
 
 <script>
 import { onMounted, computed, ref } from "vue";
-import { useAuthStore, useOrderStore } from "../../stores";
+import { useAuthStore, useOrderStore, useUtilityStore } from "../../stores";
 import router from "../../router";
 import SearchBar from "../../components/searchbar.vue";
-import TableCheckbox from "../../components/tableCheckbox.vue";
+import Table from "../../components/table.vue";
+import Pagination from "../../components/pagination.vue";
 export default {
   components: {
     SearchBar,
-    TableCheckbox,
+    Table,
+    Pagination,
   },
   setup() {
-
-    const selected = ref([]);
-    const isItemSelected = ref(false);
-    const onSelectedUpdate = (newValue) => {
-      selected.value = newValue;
-      isItemSelected.value = selected.value.length > 0;
-    };
-
     const tableColumns = computed(() => {
       return [
         { id: "orderdateString", title: "orderdate" },
@@ -152,6 +122,33 @@ export default {
     const handleSearch = (searchText) => {
       textInput.value = searchText;
     };
+    // search bar end
+
+    // pagination start
+    let currentPage = ref(1);
+    const onPageChange = (pageNumber) => {
+      currentPage.value = pageNumber;
+    };
+
+    let itemsPerPage = ref(13);
+    const totalPages = computed(() => {
+      if (filteredItems.value && filteredItems.value.length) {
+        return Math.ceil(filteredItems.value.length / itemsPerPage.value);
+      } else {
+        return 0;
+      }
+    });
+
+    const paginatedData = computed(() => {
+      if (filteredItems.value && filteredItems.value.length > 0) {
+        const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+        const endIndex = startIndex + itemsPerPage.value;
+        return filteredItems.value.slice(startIndex, endIndex);
+      } else {
+        return [];
+      }
+    });
+    // pagination end
 
     onMounted(() => {
       store.getOrderZort();
@@ -163,9 +160,11 @@ export default {
       textInput,
       filteredItems,
       handleSearch,
-      selected,
-      isItemSelected,
-      onSelectedUpdate,
+      currentPage,
+      itemsPerPage,
+      totalPages,
+      paginatedData,
+      onPageChange,
     };
   },
 };

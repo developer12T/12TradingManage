@@ -82,7 +82,7 @@ export default {
     async SignIn() {
       const authStore = useAuthStore();
       await authStore.login(this.userLogin, this.passwordLogin);
-      this.$router.push("/home");
+      this.$router.push("/zort");
     },
   },
 };
