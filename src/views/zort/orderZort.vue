@@ -2,21 +2,33 @@
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
       <div
-        class="flex justify-between flex-col mb-2 sm:flex-row sm:items-center"
+        class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
       >
-        <a
+        <a @click="handleTabClick('wait-tab')"
           :href="
             'http://58.181.206.156:8080/12Trading/zort_pdf/printReceipt.php?checklist=' +
             selected
           "
           target="_blank"
-          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-5 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
           :class="{ 'pointer-events-none': !isItemSelected }"
         >
           พิมพ์ใบเสร็จ
         </a>
         <SearchBar :searchBar="textInput" @search="handleSearch" />
       </div>
+      
+      <div class="text-sm font-medium text-center mb-1 text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 bg-white  rounded-lg">
+        <ul class="flex flex-wrap -mb-px">
+          <li class="mr-2">
+            <a href="#" @click="handleTabClick('wait-tab')" :class="{'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500': tabb === 'wait-tab', 'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300': tabb !== 'wait-tab'}" aria-current="page">รอปริ้น</a>
+          </li> 
+          <li class="mr-2">
+            <a href="#" @click="handleTabClick('success-tab')" :class="{'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500': tabb === 'success-tab', 'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300': tabb !== 'success-tab'}">ปริ้นสำเร็จ</a>
+          </li>
+        </ul>
+      </div>
+
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <TableCheckbox
           :columns="tableColumns"
@@ -41,6 +53,12 @@
               <span
                 v-if="row.status === 'Voided'"
                 class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
+              >
+                {{ row.status }}
+              </span>  
+              <span
+                v-if="row.status === 'Waiting'"
+                class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300"
               >
                 {{ row.status }}
               </span>
@@ -97,7 +115,14 @@ import { useAuthStore, useOrderStore } from "../../stores";
 import router from "../../router";
 import SearchBar from "../../components/searchbar.vue";
 import TableCheckbox from "../../components/tableCheckbox.vue";
+
 export default {
+
+  methods: {
+    handleTabClick(tabName) {
+      this.tabb = tabName; 
+    }
+  },
   components: {
     SearchBar,
     TableCheckbox,
@@ -113,13 +138,14 @@ export default {
 
     const tableColumns = computed(() => {
       return [
-        { id: "orderdateString", title: "orderdate" },
+        { id: "createdatetime", title: "orderdate" },
         { id: "number", title: "number" },
         { id: "customer", title: "customername" },
         { id: "amount", title: "amount" },
         { id: "status", title: "status" },
         { id: "paymentstatus", title: "paymentstatus" },
         { id: "saleschannel", title: "channel" },
+        { id: "totalprint", title: "printcount" },
       ];
     });
 
@@ -127,11 +153,24 @@ export default {
     if (!authStore.user) {
       router.push("/");
     }
+    
+   
+    const tabb = ref("wait-tab");
 
     const store = useOrderStore();
+
     const orders = computed(() => {
       return store.zortOrder;
     });
+
+    const handleTabClick = (tabName) => {
+      tabb.value = tabName; 
+      console.log("tabb value after click:", tabb.value); 
+      store.setTab(tabb.value);
+      store.getOrderZort();
+    };
+
+    store.setTab(tabb.value);
 
     // search bar start
     const textInput = ref("");
@@ -151,6 +190,7 @@ export default {
 
     const handleSearch = (searchText) => {
       textInput.value = searchText;
+
     };
 
     onMounted(() => {
@@ -166,7 +206,9 @@ export default {
       selected,
       isItemSelected,
       onSelectedUpdate,
+      handleTabClick,
     };
   },
 };
+
 </script>

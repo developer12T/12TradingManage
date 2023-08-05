@@ -1,7 +1,13 @@
 <template>
+ 
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
+      <div
+        class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
+      >
       <SearchBar :searchBar="textInput" @search="handleSearch" />
+      <button type="button" class="text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">อัพเดตสต็อกจาก M3</button>
+    </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table
           class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
@@ -30,7 +36,11 @@
               <td class="px-6 py-4">{{ item.sku }}</td>
               <td class="px-6 py-4">{{ item.sellprice }}</td>
               <td class="px-6 py-4">{{ item.stock }}</td>
-              <td class="px-6 py-4">{{ item.availablestock }}</td>
+              <td class="px-6 py-4">
+                <span v-if="item.availablestock < 0" class="text-red-500 font-medium">{{item.availablestock }}</span>  
+                  <span v-else-if="item.availablestock == 0"  class="text-yellow-400 font-medium">{{ item.availablestock }}</span>  
+                  <span v-else="item.availablestock > 0"  class="text-green-500 font-medium">{{ item.availablestock }}</span>  
+                </td>
             </tr>
           </tbody>
         </table>

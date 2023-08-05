@@ -28,11 +28,17 @@
             >
               <td class="px-6 py-4">{{ item.warehouse }}</td>
               <td class="px-6 py-4">{{ item.itemcode }}</td>
+              <td class="px-6 py-4">{{ item.itemsname }}</td>
               <td class="px-6 py-4">{{ item.location }}</td>
               <td class="px-6 py-4">{{ item.lot }}</td>
               <td class="px-6 py-4">{{ item.balance }}</td>
               <td class="px-6 py-4">{{ item.allocated }}</td>
-              <td class="px-6 py-4">{{ item.available }}</td>
+              <td class="px-6 py-4">
+              
+                <span v-if="item.available < 0" class="text-red-600 font-medium">{{item.available }}</span>  
+                  <span v-else-if="item.available == 0"  class="text-red-600 font-medium">{{ item.available }}</span>  
+                  <span v-else="item.available > 0"  class="text-green-500 font-medium">{{ item.available }}</span>  
+                </td>
             </tr>
           </tbody>
         </table>
@@ -109,6 +115,7 @@ export default {
       tbHeader: [
         { title: "Warehouse" },
         { title: "Item Code" },
+        { title: "Item Name" },
         { title: "Location" },
         { title: "Lot" },
         { title: "Balance" },

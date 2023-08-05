@@ -20,6 +20,7 @@
         :key="row"
         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
       >
+        <!-- <td v-for="col in columns" :key="col.id" class="px-6 py-4"> -->
         <td v-for="col in columns" :key="col.id" class="px-6 py-4">
           <div
             v-if="

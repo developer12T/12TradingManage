@@ -19,6 +19,18 @@
                 class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
               >
                 {{ row.status }}
+              </span> 
+              <span
+                v-if="row.status === 'Voided'"
+                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-blue-300"
+              >
+                {{ row.status }}
+              </span>
+              <span
+                v-if="row.status === 'Waiting'"
+                class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300"
+              >
+                {{ row.status }}
               </span>
             </div>
           </template>
@@ -33,6 +45,12 @@
               <span
                 v-if="row.paymentstatus === 'Pending'"
                 class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+              >
+                {{ row.paymentstatus }}
+              </span>
+              <span
+                v-if="row.paymentstatus === 'Voided'"
+                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-blue-300"
               >
                 {{ row.paymentstatus }}
               </span>
@@ -83,7 +101,7 @@ export default {
   setup() {
     const tableColumns = computed(() => {
       return [
-        { id: "orderdateString", title: "orderdate" },
+        { id: "createdatetime", title: "orderdate" },
         { id: "number", title: "number" },
         { id: "customer", title: "customername" },
         { id: "amount", title: "amount" },
