@@ -4,7 +4,8 @@
       <div
         class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
       >
-        <a @click="handleTabClick('wait-tab')"
+        <a
+          @click="handleTabs('wait-tab')"
           :href="
             'http://58.181.206.156:8080/12Trading/zort_pdf/printReceipt.php?checklist=' +
             selected
@@ -17,14 +18,35 @@
         </a>
         <SearchBar :searchBar="textInput" @search="handleSearch" />
       </div>
-      
-      <div class="text-sm font-medium text-center mb-1 text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 bg-white  rounded-lg">
+
+      <div
+        class="text-sm font-medium text-center mb-1 text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 bg-white rounded-lg"
+      >
         <ul class="flex flex-wrap -mb-px">
           <li class="mr-2">
-            <a href="#" @click="handleTabClick('wait-tab')" :class="{'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500': tabb === 'wait-tab', 'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300': tabb !== 'wait-tab'}" aria-current="page">รอปริ้น</a>
-          </li> 
+            <a
+              @click="handleTabs('wait-tab')"
+              :class="{
+                'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500':
+                  tabs === 'wait-tab',
+                'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
+                  tabs !== 'wait-tab',
+              }"
+              aria-current="page"
+              >รอพิมพ์</a
+            >
+          </li>
           <li class="mr-2">
-            <a href="#" @click="handleTabClick('success-tab')" :class="{'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500': tabb === 'success-tab', 'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300': tabb !== 'success-tab'}">ปริ้นสำเร็จ</a>
+            <a
+              @click="handleTabs('success-tab')"
+              :class="{
+                'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500':
+                  tabs === 'success-tab',
+                'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
+                  tabs !== 'success-tab',
+              }"
+              >พิมพ์สำเร็จ</a
+            >
           </li>
         </ul>
       </div>
@@ -55,7 +77,7 @@
                 class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
               >
                 {{ row.status }}
-              </span>  
+              </span>
               <span
                 v-if="row.status === 'Waiting'"
                 class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300"
@@ -111,30 +133,21 @@
 
 <script>
 import { onMounted, computed, ref } from "vue";
-import { useAuthStore, useOrderStore } from "../../stores";
+import { useAuthStore, useOrderStore, useUtilityStore } from "../../stores";
 import router from "../../router";
 import SearchBar from "../../components/searchbar.vue";
 import TableCheckbox from "../../components/tableCheckbox.vue";
 
 export default {
-
-  methods: {
-    handleTabClick(tabName) {
-      this.tabb = tabName; 
-    }
-  },
   components: {
     SearchBar,
     TableCheckbox,
   },
   setup() {
-
-    const selected = ref([]);
-    const isItemSelected = ref(false);
-    const onSelectedUpdate = (newValue) => {
-      selected.value = newValue;
-      isItemSelected.value = selected.value.length > 0;
-    };
+    const authStore = useAuthStore();
+    if (!authStore.user) {
+      router.push("/");
+    }
 
     const tableColumns = computed(() => {
       return [
@@ -149,28 +162,35 @@ export default {
       ];
     });
 
-    const authStore = useAuthStore();
-    if (!authStore.user) {
-      router.push("/");
-    }
-    
-   
-    const tabb = ref("wait-tab");
-
     const store = useOrderStore();
-
     const orders = computed(() => {
       return store.zortOrder;
     });
 
-    const handleTabClick = (tabName) => {
-      tabb.value = tabName; 
-      console.log("tabb value after click:", tabb.value); 
-      store.setTab(tabb.value);
+    const selected = ref([]);
+    const isItemSelected = ref(false);
+    const onSelectedUpdate = (newValue) => {
+      selected.value = newValue;
+      isItemSelected.value = selected.value.length > 0;
+    };
+
+    const tabs = ref("wait-tab");
+    const handleTabs = (tabName) => {
+      tabs.value = tabName;
+      console.log("tabs value after click:", tabs.value);
+      store.setTab(tabs.value);
+      printReceipt();
+    };
+
+    const checkbox = useUtilityStore();
+    const printReceipt =  () => {
       store.getOrderZort();
     };
 
-    store.setTab(tabb.value);
+    const clearCheckbox = () => {
+      checkbox.updateSelectedCheckboxes([]);
+      // selected.value = [];
+    };
 
     // search bar start
     const textInput = ref("");
@@ -190,7 +210,6 @@ export default {
 
     const handleSearch = (searchText) => {
       textInput.value = searchText;
-
     };
 
     onMounted(() => {
@@ -206,9 +225,11 @@ export default {
       selected,
       isItemSelected,
       onSelectedUpdate,
-      handleTabClick,
+      handleTabs,
+      tabs,
+      printReceipt,
+      clearCheckbox,
     };
   },
 };
-
 </script>

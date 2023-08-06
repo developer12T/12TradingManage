@@ -1,12 +1,14 @@
 export default {
-    path: '/zort',
+    path: '/onlineManage',
     component: () => import('../views/zort/layout.vue'),
+    redirect: '/onlineManage/dashboard',
     children: [
-        { path: '/order/all', component: () => import('../views/zort/orderZortAll.vue') },
-        { path: '/dashboard', component: () => import('../views/zort/Dashboard.vue') },
-        { path: '/order/inv', component: () => import('../views/zort/orderZort.vue') },
-        { path: '/order/reciept', component: () => import('../views/zort/orderZort.vue') },
-        { path: '/stock/zort', component: () => import('../views/zort/stockZort.vue') },
-        { path: '/stock/erp', component: () => import('../views/zort/stockERP.vue') }
+        { path: '/onlineManage/dashboard', component: () => import('../views/zort/dashboard.vue') },
+        { path: '/onlineManage/order/all', component: () => import('../views/zort/orderZortAll.vue') },
+        { path: '/onlineManage/order/inv', component: () => import('../views/zort/orderZort.vue') },
+        { path: '/onlineManage/order/reciept', component: () => import('../views/zort/orderZort.vue') },
+        { path: '/onlineManage/order/erp', component: () => import('../views/zort/orderZortErp.vue') },
+        { path: '/onlineManage/stock/zort', component: () => import('../views/zort/stockZort.vue') },
+        { path: '/onlineManage/stock/erp', component: () => import('../views/zort/stockERP.vue') }
     ]
 };

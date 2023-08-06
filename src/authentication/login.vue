@@ -70,6 +70,7 @@
 </template>
 <script>
 import { useAuthStore } from "../stores";
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -82,7 +83,7 @@ export default {
     async SignIn() {
       const authStore = useAuthStore();
       await authStore.login(this.userLogin, this.passwordLogin);
-      this.$router.push("/zort");
+      this.$router.push("/onlineManage");
     },
   },
 };

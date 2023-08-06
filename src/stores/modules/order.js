@@ -4,13 +4,14 @@ import axios from "axios";
 export const useOrderStore = defineStore("order", {
   state: () => ({
     zortOrder: [],
+    tabName: 'wait-tab',
   }),
   getter: {
     getZortOrder: (state) => state.zortOrder,
+    gettabName: (state) => state.tabName,
   },
   actions: {
     setTab(tabName) { 
-      this.zortOrder = []; // รีเซ็ต zortOrder เป็นค่าว่าง เพื่อให้ค่าที่เก็บใน zortOrder เปลี่ยนตาม tabName ที่ถูกเลือกใหม่
       this.tabName = tabName; // กำหนดค่า tabName ให้เป็นค่าที่เลือกใหม่
       this.getOrderZort(); // เรียก getOrderZort เพื่อดึงข้อมูลใหม่สำหรับ tab ใหม่ที่เลือก
     },

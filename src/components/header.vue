@@ -27,7 +27,7 @@
               ></path>
             </svg>
           </button>
-          <a href="/home" class="flex items-center">
+          <a href="/onlineManage" class="flex items-center">
             <img src="/logo-onetwo.png" class="h-8 mr-3" alt="12Trading Logo" />
             <span
               class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"

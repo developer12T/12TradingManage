@@ -1,67 +1,73 @@
 <template>
- 
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
       <div
         class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
       >
-      <SearchBar :searchBar="textInput" @search="handleSearch" />
-      <button type="button" class="text-yellow-500 hover:text-white border border-yellow-500 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">อัพเดตสต็อกจาก M3</button>
-    </div>
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table
-          class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+        <SearchBar :searchBar="textInput" @search="handleSearch" />
+        <button
+          @click="updateStockErp"
+          type="button"
+          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
         >
-          <thead
-            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-          >
-            <tr>
-              <th
-                v-for="title in tbHeader"
-                :key="title.title"
-                scope="col"
-                class="px-6 py-3"
+          นำเข้าสต็อกจาก ERP
+        </button>
+      </div>
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <Table :columns="tableColumns" :data="paginatedData">
+          <template v-slot:availablestock="{ row }">
+            <div class="flex items-center justify-center">
+              <span
+                v-if="row.availablestock > 0"
+                class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
               >
-                {{ title.title }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="item in paginatedData"
-              :key="item.id"
-              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-            >
-              <td class="px-6 py-4">{{ item.name }}</td>
-              <td class="px-6 py-4">{{ item.sku }}</td>
-              <td class="px-6 py-4">{{ item.sellprice }}</td>
-              <td class="px-6 py-4">{{ item.stock }}</td>
-              <td class="px-6 py-4">
-                <span v-if="item.availablestock < 0" class="text-red-500 font-medium">{{item.availablestock }}</span>  
-                  <span v-else-if="item.availablestock == 0"  class="text-yellow-400 font-medium">{{ item.availablestock }}</span>  
-                  <span v-else="item.availablestock > 0"  class="text-green-500 font-medium">{{ item.availablestock }}</span>  
-                </td>
-            </tr>
-          </tbody>
-        </table>
+                {{ row.availablestock }}
+              </span>
+              <span
+                v-if="row.availablestock <= 0"
+                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-blue-300"
+              >
+                {{ row.availablestock }}
+              </span>
+            </div>
+          </template>
+        </Table>
       </div>
     </div>
-    <Pagination :currentPage="currentPage" :totalPages="totalPages" :itemsPerPage="itemsPerPage" @page-changed="onPageChange" />
+    <Pagination
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      :itemsPerPage="itemsPerPage"
+      @page-changed="onPageChange"
+    />
   </div>
 </template>
 
 <script>
 import { onMounted, computed, ref } from "vue";
 import { useAuthStore, useItemStore } from "../../stores";
+import Swal from "sweetalert2";
 import router from "../../router";
 import SearchBar from "../../components/searchbar.vue";
+import Table from "../../components/table.vue";
 import Pagination from "../../components/pagination.vue";
 export default {
   components: {
     SearchBar,
+    Table,
     Pagination,
   },
   setup() {
+    const tableColumns = computed(() => {
+      return [
+        { id: "name", title: "Name" },
+        { id: "sku", title: "SKU" },
+        { id: "sellprice", title: "Price" },
+        { id: "stock", title: "Stock" },
+        { id: "availablestock", title: "Available" },
+      ];
+    });
+
     const authStore = useAuthStore();
     if (!authStore.user) {
       router.push("/");
@@ -71,15 +77,42 @@ export default {
       return store.zortItem;
     });
 
-    const textInput = ref('');
+    const updateStockErp = async () => {
+      try {
+        Swal.fire({
+          icon: "info",
+          title: "กำลังอัปเดตสต็อก",
+          text: "กรุณารอสักครู่...",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+        });
+        await store.updateStock();
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ!",
+          text: "อัปเดตสต็อกสินค้าสำเร็จ",
+        });
+        await store.getProductZort();
+      } catch (error) {
+        Swal.hideLoading();
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด!",
+          text: "ไม่สามารถอัปเดตสต็อกสินค้าได้",
+        });
+      }
+    };
+
+    const textInput = ref("");
     const filteredItems = computed(() => {
       if (!textInput.value) {
         return items.value;
       }
       const keyword = textInput.value.toLowerCase();
-      return items.value.filter((item) =>
-        item.name.toLowerCase().includes(keyword) ||
-        item.sku.toLowerCase().includes(keyword)
+      return items.value.filter(
+        (item) =>
+          item.name.toLowerCase().includes(keyword) ||
+          item.sku.toLowerCase().includes(keyword)
       );
     });
 
@@ -112,6 +145,7 @@ export default {
       textInput,
       filteredItems,
       handleSearch,
+      tableColumns,
       tbHeader: [
         { title: "Name" },
         { title: "SKU" },
@@ -121,9 +155,11 @@ export default {
       ],
       currentPage,
       itemsPerPage,
-      totalPages, 
+      totalPages,
       paginatedData,
-      onPageChange
+      onPageChange,
+      updateStockErp,
+      // updateLoading,
     };
   },
 };

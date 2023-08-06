@@ -3,45 +3,24 @@
     <div class="p-4 mt-14">
       <SearchBar :searchBar="textInput" @search="handleSearch" />
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table
-          class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
-        >
-          <thead
-            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-          >
-            <tr>
-              <th
-                v-for="title in tbHeader"
-                :key="title.title"
-                scope="col"
-                class="px-6 py-3"
+        <Table :columns="tableColumns" :data="paginatedData">
+          <template v-slot:available="{ row }">
+            <div class="flex items-center justify-center">
+              <span
+                v-if="row.available > 0 "
+                class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
               >
-                {{ title.title }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="item in paginatedData"
-              :key="item"
-              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-            >
-              <td class="px-6 py-4">{{ item.warehouse }}</td>
-              <td class="px-6 py-4">{{ item.itemcode }}</td>
-              <td class="px-6 py-4">{{ item.itemsname }}</td>
-              <td class="px-6 py-4">{{ item.location }}</td>
-              <td class="px-6 py-4">{{ item.lot }}</td>
-              <td class="px-6 py-4">{{ item.balance }}</td>
-              <td class="px-6 py-4">{{ item.allocated }}</td>
-              <td class="px-6 py-4">
-              
-                <span v-if="item.available < 0" class="text-red-600 font-medium">{{item.available }}</span>  
-                  <span v-else-if="item.available == 0"  class="text-red-600 font-medium">{{ item.available }}</span>  
-                  <span v-else="item.available > 0"  class="text-green-500 font-medium">{{ item.available }}</span>  
-                </td>
-            </tr>
-          </tbody>
-        </table>
+                {{ row.available }}
+              </span>
+              <span
+                v-if="row.available <= 0"
+                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-blue-300"
+              >
+                {{ row.available }}
+              </span>
+            </div>
+          </template>
+        </Table>
       </div>
     </div>
     <Pagination :currentPage="currentPage" :totalPages="totalPages" :itemsPerPage="itemsPerPage" @page-changed="onPageChange" />
@@ -53,13 +32,29 @@ import { onMounted, computed, ref } from "vue";
 import { useAuthStore, useItemStore } from "../../stores";
 import router from "../../router";
 import SearchBar from "../../components/searchbar.vue";
+import Table from "../../components/table.vue";
 import Pagination from "../../components/pagination.vue";
 export default {
   components: {
     SearchBar,
+    Table,
     Pagination,
   },
   setup() {
+
+    const tableColumns = computed(() => {
+      return [
+        { id: "warehouse", title: "Warehouse" },
+        { id: "itemcode", title: "Item Code" },
+        { id: "itemsname", title: "Item Name" },
+        { id: "location", title: "Location" },
+        { id: "lot", title: "Lot" },
+        { id: "balance", title: "Balance" },
+        { id: "allocated", title: "Allocated" },
+        { id: "available", title: "Available" },
+      ];
+    });
+    
     const authStore = useAuthStore();
     if (!authStore.user) {
       router.push("/");
@@ -112,16 +107,7 @@ export default {
       textInput,
       filteredItems,
       handleSearch,
-      tbHeader: [
-        { title: "Warehouse" },
-        { title: "Item Code" },
-        { title: "Item Name" },
-        { title: "Location" },
-        { title: "Lot" },
-        { title: "Balance" },
-        { title: "Allocated" },
-        { title: "Available" },
-      ],
+      tableColumns,
       currentPage,
       itemsPerPage,
       totalPages, 

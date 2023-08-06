@@ -1,12 +1,54 @@
 <template>
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
-      <div class="flex justify-between flex-col mb-2 sm:flex-row sm:items-center">
-        <Count :data="filteredItems"></Count>
+      <div
+        class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
+      >
+        <a
+          @click="handleTabs('wait-tab')"
+          :href="'http://58.181.206.156:8080/12Trading/zort_pdf/printReceipt.php?checklist='"
+          target="_blank"
+          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+        >
+          นำเข้าระบบ
+        </a>
         <SearchBar :searchBar="textInput" @search="handleSearch" />
       </div>
+
+      <div
+        class="text-sm font-medium text-center mb-1 text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 bg-white rounded-lg"
+      >
+        <ul class="flex flex-wrap -mb-px">
+          <li class="mr-2">
+            <a
+              @click="handleTabs('wait-tab')"
+              :class="{
+                'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500':
+                  tabs === 'wait-tab',
+                'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
+                  tabs !== 'wait-tab',
+              }"
+              aria-current="page"
+              >รอนำเข้าระบบ</a
+            >
+          </li>
+          <li class="mr-2">
+            <a
+              @click="handleTabs('success-tab')"
+              :class="{
+                'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500':
+                  tabs === 'success-tab',
+                'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
+                  tabs !== 'success-tab',
+              }"
+              >นำเข้าระบบสำเร็จ</a
+            >
+          </li>
+        </ul>
+      </div>
+
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <Table :columns="tableColumns" :data="paginatedData">
+        <Table :columns="tableColumns" :data="filteredItems">
           <template v-slot:status="{ row }">
             <div class="flex items-center justify-center">
               <span
@@ -20,10 +62,10 @@
                 class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
               >
                 {{ row.status }}
-              </span> 
+              </span>
               <span
                 v-if="row.status === 'Voided'"
-                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-blue-300"
+                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
               >
                 {{ row.status }}
               </span>
@@ -51,7 +93,7 @@
               </span>
               <span
                 v-if="row.paymentstatus === 'Voided'"
-                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-blue-300"
+                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
               >
                 {{ row.paymentstatus }}
               </span>
@@ -77,31 +119,27 @@
         </Table>
       </div>
     </div>
-    <Pagination
-      :currentPage="currentPage"
-      :totalPages="totalPages"
-      :itemsPerPage="itemsPerPage"
-      @page-changed="onPageChange"
-    />
   </div>
 </template>
 
 <script>
 import { onMounted, computed, ref } from "vue";
-import { useAuthStore, useOrderStore, useUtilityStore } from "../../stores";
+import { useAuthStore, useOrderStore } from "../../stores";
 import router from "../../router";
 import SearchBar from "../../components/searchbar.vue";
-import Count from "./orderCount.vue";
 import Table from "../../components/table.vue";
-import Pagination from "../../components/pagination.vue";
+
 export default {
   components: {
     SearchBar,
-    Count,
     Table,
-    Pagination,
   },
   setup() {
+    const authStore = useAuthStore();
+    if (!authStore.user) {
+      router.push("/");
+    }
+
     const tableColumns = computed(() => {
       return [
         { id: "createdatetime", title: "orderdate" },
@@ -114,15 +152,29 @@ export default {
       ];
     });
 
-    const authStore = useAuthStore();
-    if (!authStore.user) {
-      router.push("/");
-    }
-
     const store = useOrderStore();
     const orders = computed(() => {
       return store.zortOrder;
     });
+
+    const selected = ref([]);
+    const isItemSelected = ref(false);
+    const onSelectedUpdate = (newValue) => {
+      selected.value = newValue;
+      isItemSelected.value = selected.value.length > 0;
+    };
+
+    const tabs = ref("wait-tab");
+    const handleTabs = (tabName) => {
+      tabs.value = tabName;
+      console.log("tabs value after click:", tabs.value);
+      store.setTab(tabs.value);
+      printReceipt();
+    };
+
+    const printReceipt = () => {
+      store.getOrderZort();
+    };
 
     // search bar start
     const textInput = ref("");
@@ -143,33 +195,6 @@ export default {
     const handleSearch = (searchText) => {
       textInput.value = searchText;
     };
-    // search bar end
-
-    // pagination start
-    let currentPage = ref(1);
-    const onPageChange = (pageNumber) => {
-      currentPage.value = pageNumber;
-    };
-
-    let itemsPerPage = ref(13);
-    const totalPages = computed(() => {
-      if (filteredItems.value && filteredItems.value.length) {
-        return Math.ceil(filteredItems.value.length / itemsPerPage.value);
-      } else {
-        return 0;
-      }
-    });
-
-    const paginatedData = computed(() => {
-      if (filteredItems.value && filteredItems.value.length > 0) {
-        const startIndex = (currentPage.value - 1) * itemsPerPage.value;
-        const endIndex = startIndex + itemsPerPage.value;
-        return filteredItems.value.slice(startIndex, endIndex);
-      } else {
-        return [];
-      }
-    });
-    // pagination end
 
     onMounted(() => {
       store.getOrderZort();
@@ -181,11 +206,12 @@ export default {
       textInput,
       filteredItems,
       handleSearch,
-      currentPage,
-      itemsPerPage,
-      totalPages,
-      paginatedData,
-      onPageChange,
+      selected,
+      isItemSelected,
+      onSelectedUpdate,
+      handleTabs,
+      tabs,
+      printReceipt,
     };
   },
 };
