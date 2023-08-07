@@ -5,7 +5,7 @@
         class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
       >
         <a
-          @click="handleTabs('wait-tab')"
+          @click="printReceipt()"
           :href="
             'http://58.181.206.156:8080/12Trading/zort_pdf/printReceipt.php?checklist=' +
             selected
@@ -179,7 +179,7 @@ export default {
       tabs.value = tabName;
       console.log("tabs value after click:", tabs.value);
       store.setTab(tabs.value);
-      printReceipt();
+      checkbox.updateSelectedCheckboxes([]);
     };
 
     const checkbox = useUtilityStore();

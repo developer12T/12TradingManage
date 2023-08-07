@@ -49,12 +49,31 @@ export const useItemStore = defineStore("item", {
         console.error(error);
       }
     },
-    async updateStock() {
+    async updateErpStock() {
       try {
         const token = JSON.parse(localStorage.getItem("token"));
         const response = await axios.put(
           import.meta.env.VITE_API_BASE_URL +
             "/zort/product/ProductManage/updateStock12T",
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const result = response.data;
+        this.erpItem = result
+        console.log("stock",this.erpItem);
+        return this.erpItem;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async updateZortStock() {
+      try {
+        const token = JSON.parse(localStorage.getItem("token"));
+        const response = await axios.put(
+          import.meta.env.VITE_API_BASE_URL +
+            "/zort/product/ProductManage/addProduct",
           {},
           {
             headers: { Authorization: `Bearer ${token}` },

@@ -5,13 +5,23 @@
         class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
       >
         <SearchBar :searchBar="textInput" @search="handleSearch" />
-        <button
+        <div class="flex justify-between">
+          <button
           @click="updateStockErp"
+          type="button"
+          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 mr-3 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+        >
+          นำเข้าสต็อกจาก Erp
+        </button>
+        <button
+          @click="updateStockZort"
           type="button"
           class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
         >
-          นำเข้าสต็อกจาก ERP
+          นำเข้าสินค้าจาก Zort
         </button>
+        </div>
+        
       </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <Table :columns="tableColumns" :data="paginatedData">
@@ -86,7 +96,33 @@ export default {
           showConfirmButton: false,
           allowOutsideClick: false,
         });
-        await store.updateStock();
+        await store.updateErpStock();
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ!",
+          text: "อัปเดตสต็อกสินค้าสำเร็จ",
+        });
+        await store.getProductZort();
+      } catch (error) {
+        Swal.hideLoading();
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด!",
+          text: "ไม่สามารถอัปเดตสต็อกสินค้าได้",
+        });
+      }
+    };
+
+    const updateStockZort = async () => {
+      try {
+        Swal.fire({
+          icon: "info",
+          title: "กำลังอัปเดตสต็อก",
+          text: "กรุณารอสักครู่...",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+        });
+        await store.updateZortStock();
         Swal.fire({
           icon: "success",
           title: "สำเร็จ!",
@@ -159,7 +195,7 @@ export default {
       paginatedData,
       onPageChange,
       updateStockErp,
-      // updateLoading,
+      updateStockZort,
     };
   },
 };
