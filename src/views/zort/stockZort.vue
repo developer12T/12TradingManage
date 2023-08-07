@@ -4,7 +4,6 @@
       <div
         class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
       >
-        <SearchBar :searchBar="textInput" @search="handleSearch" />
         <div class="flex justify-between">
           <button
           @click="updateStockErp"
@@ -21,7 +20,7 @@
           นำเข้าสินค้าจาก Zort
         </button>
         </div>
-        
+        <SearchBar :searchBar="textInput" @search="handleSearch" />
       </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <Table :columns="tableColumns" :data="paginatedData">

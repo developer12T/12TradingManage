@@ -1,7 +1,10 @@
 <template>
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
-      <SearchBar :searchBar="textInput" @search="handleSearch" />
+      <div class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center">
+        <!-- <div></div> -->
+        <SearchBar :searchBar="textInput" @search="handleSearch" />
+      </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <Table :columns="tableColumns" :data="paginatedData">
           <template v-slot:available="{ row }">

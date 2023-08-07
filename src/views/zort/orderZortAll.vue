@@ -151,7 +151,7 @@ export default {
       currentPage.value = pageNumber;
     };
 
-    let itemsPerPage = ref(13);
+    let itemsPerPage = ref(150);
     const totalPages = computed(() => {
       if (filteredItems.value && filteredItems.value.length) {
         return Math.ceil(filteredItems.value.length / itemsPerPage.value);
