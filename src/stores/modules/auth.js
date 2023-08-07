@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth',{
     async login(userLogin, passwordLogin) {
       try {
         const reponse = await axios.post(
-          import.meta.env.VITE_API_BASE_URL+'/12Trading/login',
+          import.meta.env.VITE_API_BASE_URL+'/12Trading/loginAnt',
           { username: userLogin, 
             password: passwordLogin 
           },
