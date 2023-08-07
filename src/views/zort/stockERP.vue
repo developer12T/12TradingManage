@@ -74,7 +74,8 @@ export default {
       return items.value.filter((item) =>
         item.itemcode.toLowerCase().includes(keyword) ||
         item.lot.toLowerCase().includes(keyword) ||
-        item.warehouse.toLowerCase().includes(keyword)
+        item.warehouse.toLowerCase().includes(keyword) ||
+        item.itemsname.toLowerCase().includes(keyword)
       );
     });
 
