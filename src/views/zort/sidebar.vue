@@ -74,14 +74,14 @@
                 >ทั้งหมด</a
               >
             </li>
-            <li>
+            <!-- <li>
               <a
                 href="/onlineManage/order/inv"
                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 @click="setPage('inv')"
                 >พิมพ์ใบกำกับภาษี</a
               >
-            </li>
+            </li> -->
             <li>
               <a
                 href="/onlineManage/order/reciept"

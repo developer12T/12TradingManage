@@ -24,7 +24,7 @@
       >
         <ul class="flex flex-wrap -mb-px">
           <li class="mr-2">
-            <a
+            <a href="#"
               @click="handleTabs('wait-tab')"
               :class="{
                 'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500':
@@ -37,7 +37,7 @@
             >
           </li>
           <li class="mr-2">
-            <a
+            <a  href="#"
               @click="handleTabs('success-tab')"
               :class="{
                 'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500':
@@ -166,6 +166,7 @@ export default {
     const orders = computed(() => {
       return store.zortOrder;
     });
+ 
 
     const selected = ref([]);
     const isItemSelected = ref(false);
