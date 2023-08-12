@@ -21,16 +21,7 @@
         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
       >
         <td v-for="col in columns" :key="col.id" class="px-6 py-4">
-          <div
-            v-if="
-              col.id === 'saleschannel' ||
-              col.id === 'status' ||
-              col.id === 'paymentstatus'
-            "
-          >
-            <slot :name="col.id" :row="row" />
-          </div>
-          <div v-else class="text-center">
+          <div class="text-center">
             <slot :name="col.id" :row="row">{{ row[col.id] }}</slot>
           </div>
         </td>

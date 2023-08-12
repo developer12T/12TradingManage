@@ -2,17 +2,21 @@
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
       <div
-        class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
+        class="flex flex-col-reverse sm:flex-row justify-end items-center mb-4"
       >
-        <a
-          @click="handleTabs('wait-tab')"
-          :href="'http://58.181.206.156:8080/12Trading/zort_pdf/printReceipt.php?checklist='"
-          target="_blank"
-          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+        <div class="mr-auto">
+          <CountOrderErp :data="filteredItems" />
+        </div>
+        <button
+          @click="addOrder()"
+          type="button"
+          class="bg-green-500 hover:bg-green-600 text-white border border-green-500 hover:border-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-2 sm:mb-0 dark:bg-green-600 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-700 dark:focus:ring-green-800 sm:ml-4"
         >
           นำเข้าระบบ
-        </a>
+        </button>
+        <div class="flex items-center sm:order-2 mb-4 sm:mb-0 ml-4">
         <SearchBar :searchBar="textInput" @search="handleSearch" />
+      </div>
       </div>
 
       <div
@@ -104,16 +108,15 @@
               <img
                 v-if="row.saleschannel === 'Shopee'"
                 src="/shopee-icon.png"
-                width="15"
+                width="25"
                 class="mr-1"
               />
               <img
                 v-else-if="row.saleschannel === 'Lazada'"
                 src="/lazada-icon.png"
-                width="15"
+                width="25"
                 class="mr-1"
               />
-              <span :title="row.saleschannel">{{ row.saleschannel }}</span>
             </div>
           </template>
         </Table>
@@ -125,30 +128,28 @@
 <script>
 import { onMounted, computed, ref } from "vue";
 import { useAuthStore, useOrderStore } from "../../stores";
-import router from "../../router";
+import Swal from "sweetalert2";
 import SearchBar from "../../components/searchbar.vue";
 import Table from "../../components/table.vue";
-
+import CountOrderErp from "./orderCount.vue";
 export default {
   components: {
     SearchBar,
     Table,
+    CountOrderErp
   },
   setup() {
-    const authStore = useAuthStore();
-    if (!authStore.user) {
-      router.push("/");
-    }
 
     const tableColumns = computed(() => {
       return [
-        { id: "createdatetime", title: "orderdate" },
-        { id: "number", title: "number" },
-        { id: "customer", title: "customername" },
-        { id: "amount", title: "amount" },
-        { id: "status", title: "status" },
-        { id: "paymentstatus", title: "paymentstatus" },
-        { id: "saleschannel", title: "channel" },
+        { id: "createdatetime", title: "วันที่" },
+        { id: "cono", title: "CO" },
+        { id: "invno", title: "INV" },
+        { id: "number", title: "รายการ" },
+        { id: "customer", title: "ลูกค้า" },
+        { id: "amount", title: "มูลค่า" },
+        { id: "status", title: "สถานะ" },
+        { id: "saleschannel", title: "ช่องทาง" },
       ];
     });
 
@@ -156,6 +157,32 @@ export default {
     const orders = computed(() => {
       return store.zortOrder;
     });
+
+    const addOrder = async () => {
+      try {
+        Swal.fire({
+          icon: "info",
+          title: "กำลังนำเข้าระบบ",
+          text: "กรุณารอสักครู่...",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+        });
+        await store.addOrderErp();
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ!",
+          text: "นำเข้าระบบสำเร็จ",
+        });
+        await store.getOrderZort();
+      } catch (error) {
+        Swal.hideLoading();
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด!",
+          text: "ไม่สามารถนำเข้าระบบได้",
+        });
+      }
+    };
 
     const selected = ref([]);
     const isItemSelected = ref(false);
@@ -202,6 +229,7 @@ export default {
 
     return {
       tableColumns,
+      addOrder,
       orders,
       textInput,
       filteredItems,

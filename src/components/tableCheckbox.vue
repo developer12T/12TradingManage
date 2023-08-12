@@ -14,18 +14,12 @@
     <tbody>
       <tr v-for="row in data" :key="row"
         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <td class="px-6 py-4">
+        <td class="px-6 py-5">
           <input type="checkbox" v-model="selected" :value="row.id"
             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
         </td>
         <td v-for="col in columns" :key="col.id" class="px-1 py-1">
-          <div v-if="col.id === 'saleschannel' ||
-            col.id === 'status' ||
-            col.id === 'paymentstatus'
-            ">
-            <slot :name="col.id" :row="row" />
-          </div>
-          <div v-else class="text-center">
+          <div class="text-center">
             <slot :name="col.id" :row="row">{{ row[col.id] }}</slot>
           </div>
         </td>

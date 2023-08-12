@@ -2,8 +2,14 @@
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
       <div
-        class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
+        class="flex flex-col-reverse sm:flex-row justify-end items-center mb-4"
       >
+        <div class="mr-auto">
+          <CountOrder :data="filteredItems" />
+        </div>
+        <div class="flex items-center sm:order-1 mb-4 sm:mb-0 ml-4">
+          <SearchOrder :searchBar="textInput" @search="handleSearch" />
+        </div>
         <a
           @click="printReceipt()"
           :href="
@@ -11,12 +17,12 @@
             selected
           "
           target="_blank"
-          class="text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+          class="bg-green-500 hover:bg-green-600 text-white border border-green-500 hover:border-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-2 sm:mb-0 dark:bg-green-600 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-700 dark:focus:ring-green-800 sm:ml-4"
           :class="{ 'pointer-events-none': !isItemSelected }"
         >
           พิมพ์ใบเสร็จ
+          {{ selected.length > 0 ? selected.length + " ใบ" : "" }}
         </a>
-        <SearchBar :searchBar="textInput" @search="handleSearch" />
       </div>
 
       <div
@@ -24,7 +30,8 @@
       >
         <ul class="flex flex-wrap -mb-px">
           <li class="mr-2">
-            <a href="#"
+            <a
+              href="#"
               @click="handleTabs('wait-tab')"
               :class="{
                 'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500':
@@ -37,7 +44,8 @@
             >
           </li>
           <li class="mr-2">
-            <a  href="#"
+            <a
+              href="#"
               @click="handleTabs('success-tab')"
               :class="{
                 'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500':
@@ -52,12 +60,41 @@
       </div>
 
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <TableCheckbox
+        <TableOrder
           :columns="tableColumns"
           :data="filteredItems"
           :selected="selected"
           @update:selected="onSelectedUpdate"
         >
+          <template v-slot:number="{ row }">
+            <div class="flex items-center justify-center">
+              <span>
+                {{ row.number }}
+
+                <div
+                  v-if="row.invstatus !== ''"
+                  class="text-blue-800 text-xs font-medium ml-0 px-1 py-0.5 rounded-full dark:text-blue-300"
+                >
+                  <svg
+                    class="w-3 h-3 text-gray-800 dark:text-white mr-1 inline-flex"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 19 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.583 5.445h.01M8.86 16.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 10.31 1l5.734.007A1.968 1.968 0 0 1 18 2.983v5.5a.994.994 0 0 1-.316.727l-7.439 7.5a.975.975 0 0 1-1.385.001Z"
+                    />
+                  </svg>
+                  {{ row.invstatus }}
+                </div>
+              </span>
+            </div>
+          </template>
           <template v-slot:status="{ row }">
             <div class="flex items-center justify-center">
               <span
@@ -113,19 +150,19 @@
               <img
                 v-if="row.saleschannel === 'Shopee'"
                 src="/shopee-icon.png"
-                width="15"
+                width="25"
                 class="mr-1"
               />
               <img
                 v-else-if="row.saleschannel === 'Lazada'"
                 src="/lazada-icon.png"
-                width="15"
+                width="25"
                 class="mr-1"
               />
-              <span :title="row.saleschannel">{{ row.saleschannel }}</span>
+              <span :title="row.saleschannel"></span>
             </div>
           </template>
-        </TableCheckbox>
+        </TableOrder>
       </div>
     </div>
   </div>
@@ -134,14 +171,16 @@
 <script>
 import { onMounted, computed, ref } from "vue";
 import { useAuthStore, useOrderStore, useUtilityStore } from "../../stores";
+import Swal from "sweetalert2";
 import router from "../../router";
-import SearchBar from "../../components/searchbar.vue";
-import TableCheckbox from "../../components/tableCheckbox.vue";
-
+import CountOrder from "./orderCount.vue";
+import SearchOrder from "../../components/searchbar.vue";
+import TableOrder from "../../components/tableCheckbox.vue";
 export default {
   components: {
-    SearchBar,
-    TableCheckbox,
+    CountOrder,
+    SearchOrder,
+    TableOrder,
   },
   setup() {
     const authStore = useAuthStore();
@@ -151,13 +190,12 @@ export default {
 
     const tableColumns = computed(() => {
       return [
-        { id: "createdatetime", title: "orderdate" },
-        { id: "number", title: "number" },
-        { id: "customer", title: "customername" },
-        { id: "amount", title: "amount" },
-        { id: "status", title: "status" },
-        { id: "paymentstatus", title: "paymentstatus" },
-        { id: "saleschannel", title: "channel" },
+        { id: "createdatetime", title: "วันที่" },
+        { id: "number", title: "รายการ" },
+        { id: "customer", title: "ลูกค้า" },
+        { id: "amount", title: "มูลค่า" },
+        { id: "status", title: "สถานะ" },
+        { id: "saleschannel", title: "ช่องทาง" },
         { id: "totalprint", title: "printcount" },
       ];
     });
@@ -166,7 +204,6 @@ export default {
     const orders = computed(() => {
       return store.zortOrder;
     });
- 
 
     const selected = ref([]);
     const isItemSelected = ref(false);
@@ -180,17 +217,37 @@ export default {
       tabs.value = tabName;
       console.log("tabs value after click:", tabs.value);
       store.setTab(tabs.value);
-      checkbox.updateSelectedCheckboxes([]);
+      clearCheckbox();
+    };
+
+    const printReceipt = async () => {
+      try {
+        Swal.fire({
+          icon: "info",
+          title: "กำลังพิมพ์",
+          text: "กรุณารอสักครู่...",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+        });
+        await store.getOrderZort();
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ!",
+          text: "พิมพ์สำเร็จ",
+        });
+      } catch (error) {
+        Swal.hideLoading();
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด!",
+          text: "ไม่สามารถพิมพ์ได้",
+        });
+      }
     };
 
     const checkbox = useUtilityStore();
-    const printReceipt =  () => {
-      store.getOrderZort();
-    };
-
     const clearCheckbox = () => {
       checkbox.updateSelectedCheckboxes([]);
-      // selected.value = [];
     };
 
     // search bar start
@@ -205,7 +262,8 @@ export default {
           item.number.toLowerCase().includes(keyword) ||
           item.customer.toLowerCase().includes(keyword) ||
           item.orderdateString.toLowerCase().includes(keyword) ||
-          item.saleschannel.toLowerCase().includes(keyword)
+          item.saleschannel.toLowerCase().includes(keyword) ||
+          item.status.toLowerCase().includes(keyword)
       );
     });
 

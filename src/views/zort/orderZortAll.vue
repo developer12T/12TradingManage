@@ -2,11 +2,11 @@
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
       <div class="flex justify-between flex-col mb-2 sm:flex-row sm:items-center">
-        <Count :data="filteredItems"></Count>
-        <SearchBar :searchBar="textInput" @search="handleSearch" />
+        <CountOrderAll :data="filteredItems"></CountOrderAll>
+        <SearchOrderAll :searchBar="textInput" @search="handleSearch" />
       </div>
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <Table :columns="tableColumns" :data="paginatedData">
+        <TableOrderAll :columns="tableColumns" :data="paginatedData">
           <template v-slot:status="{ row }">
             <div class="flex items-center justify-center">
               <span
@@ -74,10 +74,10 @@
               <span :title="row.saleschannel">{{ row.saleschannel }}</span>
             </div>
           </template>
-        </Table>
+        </TableOrderAll>
       </div>
     </div>
-    <Pagination
+    <PaginateOrderAll
       :currentPage="currentPage"
       :totalPages="totalPages"
       :itemsPerPage="itemsPerPage"
@@ -89,17 +89,16 @@
 <script>
 import { onMounted, computed, ref } from "vue";
 import { useAuthStore, useOrderStore, useUtilityStore } from "../../stores";
-import router from "../../router";
-import SearchBar from "../../components/searchbar.vue";
-import Count from "./orderCount.vue";
-import Table from "../../components/table.vue";
-import Pagination from "../../components/pagination.vue";
+import SearchOrderAll from "../../components/searchbar.vue";
+import CountOrderAll from "./orderCount.vue";
+import TableOrderAll from "../../components/table.vue";
+import PaginateOrderAll from "../../components/pagination.vue";
 export default {
   components: {
-    SearchBar,
-    Count,
-    Table,
-    Pagination,
+    SearchOrderAll,
+    CountOrderAll,
+    TableOrderAll,
+    PaginateOrderAll,
   },
   setup() {
     const tableColumns = computed(() => {
@@ -113,11 +112,6 @@ export default {
         { id: "saleschannel", title: "channel" },
       ];
     });
-
-    const authStore = useAuthStore();
-    if (!authStore.user) {
-      router.push("/");
-    }
 
     const store = useOrderStore();
     const orders = computed(() => {

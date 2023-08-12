@@ -2,28 +2,41 @@
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
       <div
-        class="flex justify-between flex-col mb-0 sm:flex-row sm:items-center"
+        class="flex flex-col-reverse sm:flex-row justify-end items-center mb-4"
       >
-        <div class="flex justify-between">
+        <div class="flex items-center mr-4 space-x-2 sm:order-2">
           <button
-          @click="updateStockErp"
-          type="button"
-          class="text-red-500 hover:text-white border border-red-500 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 mr-3 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
-        >
-          นำเข้าสต็อกจาก Erp
-        </button>
-        <button
-          @click="updateStockZort"
-          type="button"
-          class="text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
-        >
-          นำเข้าสินค้าจาก Zort
-        </button>
+            @click="updateStockErp"
+            type="button"
+            class="bg-red-500 hover:bg-red-600 text-white border border-red-500 hover:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:bg-red-600 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-700 dark:focus:ring-red-800"
+          >
+            นำเข้าจาก Erp
+          </button>
+          <button
+            @click="updateStockZort"
+            type="button"
+            class="bg-blue-500 hover:bg-blue-600 text-white border border-blue-500 hover:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-0 dark:bg-blue-600 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            นำเข้าจาก Zort
+          </button>
         </div>
-        <SearchBar :searchBar="textInput" @search="handleSearch" />
+        <div class="flex items-center sm:order-3 mb-4 sm:mb-0">
+          <SearchBar :searchBar="textInput" @search="handleSearch" />
+        </div>
+        <div
+          class="flex items-center sm:order-1 w-full sm:w-auto sm:justify-start justify-center mr-auto"
+        >
+          <Count :data="filteredItems"/>
+        </div>
       </div>
+
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <Table :columns="tableColumns" :data="paginatedData">
+          <template v-slot:name="{ row }">
+            <div class="flex items-center justify-start">
+              {{ row.name }}
+            </div>
+          </template>
           <template v-slot:availablestock="{ row }">
             <div class="flex items-center justify-center">
               <span
@@ -56,17 +69,19 @@
 import { onMounted, computed, ref } from "vue";
 import { useAuthStore, useItemStore } from "../../stores";
 import Swal from "sweetalert2";
-import router from "../../router";
+import Count from "./stockCount.vue";
 import SearchBar from "../../components/searchbar.vue";
 import Table from "../../components/table.vue";
 import Pagination from "../../components/pagination.vue";
 export default {
   components: {
+    Count,
     SearchBar,
     Table,
     Pagination,
   },
   setup() {
+
     const tableColumns = computed(() => {
       return [
         { id: "name", title: "Name" },
@@ -77,10 +92,6 @@ export default {
       ];
     });
 
-    const authStore = useAuthStore();
-    if (!authStore.user) {
-      router.push("/");
-    }
     const store = useItemStore();
     const items = computed(() => {
       return store.zortItem;

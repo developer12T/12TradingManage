@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="flex items-center">
-      <div class="flex items-center mr-10">
+      <div class="flex items-center mr-5">
         <img src="/shopee-icon.png" width="30" class="mr-2" />
         <span class="text-xl font-medium">{{ shopee }} รายการ</span>
       </div>
-      <div class="flex items-center mr-10">
+      <div class="flex items-center mr-5">
         <img src="/lazada-icon.png" width="30" class="mr-2" />
         <span class="text-xl font-medium">{{ lazada }} รายการ</span>
       </div>

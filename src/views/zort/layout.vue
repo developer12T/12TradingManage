@@ -1,24 +1,39 @@
 <template>
     <Header></Header>
-    <Sidebar></Sidebar>
+    <SidebarOnline></SidebarOnline>
     <routerView />
 </template>
 
 <script>
-import { useAuthStore } from "../../stores";
+import { useAuthStore } from '../../stores';
+// import { useRouter } from 'vue-router'
 import router from "../../router";
-import Header from "../../components/header.vue";
-import Sidebar from "./sidebar.vue";
+import Header from '../../components/header.vue';
+import SidebarOnline from './sidebar.vue';
 export default {
   components: {
     Header,
-    Sidebar,
+    SidebarOnline,
   },
   setup() {
     const authStore = useAuthStore();
     if (!authStore.user) {
-      router.push("/");
+      router.push('/');
     }
+
+    // const authStore = useAuthStore();
+    // const router = useRouter()
+    // const login = (username, password) => {
+    //   authStore.login(username, password);
+    // };
+    // const logout = () => {
+    //   authStore.logout();
+    //   router.push('/');
+    // };
+    // return {
+    //   login,
+    //   logout,
+    // };
   },
 };
 </script>
