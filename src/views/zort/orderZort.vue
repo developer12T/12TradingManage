@@ -56,6 +56,20 @@
               >พิมพ์สำเร็จ</a
             >
           </li>
+
+          <li class="mr-2">
+            <a
+              href="#"
+              @click="handleTabs('payment-tab')"
+              :class="{
+                'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500':
+                  tabs === 'payment-tab',
+                'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
+                  tabs !== 'payment-tab',
+              }"
+              >รอชำระ</a
+            >
+          </li>
         </ul>
       </div>
 
@@ -101,25 +115,25 @@
                 v-if="row.status === 'Success'"
                 class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
               >
-                {{ row.status }}
+                {{ row.statusText }}
               </span>
               <span
                 v-if="row.status === 'Pending'"
                 class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
               >
-                {{ row.status }}
+                {{ row.statusText }}
               </span>
               <span
                 v-if="row.status === 'Voided'"
                 class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
               >
-                {{ row.status }}
+                {{ row.statusText }}
               </span>
               <span
                 v-if="row.status === 'Waiting'"
                 class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300"
               >
-                {{ row.status }}
+                {{ row.statusText }}
               </span>
             </div>
           </template>
@@ -129,19 +143,19 @@
                 v-if="row.paymentstatus === 'Paid'"
                 class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
               >
-                {{ row.paymentstatus }}
+                {{ row.paymentstatusText }}
               </span>
               <span
                 v-if="row.paymentstatus === 'Pending'"
                 class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
               >
-                {{ row.paymentstatus }}
+                {{ row.paymentstatusText }}
               </span>
               <span
                 v-if="row.paymentstatus === 'Voided'"
                 class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
               >
-                {{ row.paymentstatus }}
+                {{ row.paymentstatusText }}
               </span>
             </div>
           </template>
@@ -195,6 +209,7 @@ export default {
         { id: "customer", title: "ลูกค้า" },
         { id: "amount", title: "มูลค่า" },
         { id: "status", title: "สถานะ" },
+        { id: "paymentstatus", title: "ชำระเงิน" },
         { id: "saleschannel", title: "ช่องทาง" },
         { id: "totalprint", title: "printcount" },
       ];
@@ -204,21 +219,6 @@ export default {
     const orders = computed(() => {
       return store.zortOrder;
     });
-
-    const selected = ref([]);
-    const isItemSelected = ref(false);
-    const onSelectedUpdate = (newValue) => {
-      selected.value = newValue;
-      isItemSelected.value = selected.value.length > 0;
-    };
-
-    const tabs = ref("wait-tab");
-    const handleTabs = (tabName) => {
-      tabs.value = tabName;
-      console.log("tabs value after click:", tabs.value);
-      store.setTab(tabs.value);
-      clearCheckbox();
-    };
 
     const printReceipt = async () => {
       try {
@@ -230,6 +230,7 @@ export default {
           allowOutsideClick: false,
         });
         await store.getOrderZort();
+        await afterPrint();
         Swal.fire({
           icon: "success",
           title: "สำเร็จ!",
@@ -245,8 +246,30 @@ export default {
       }
     };
 
+    const selected = ref([]);
+    const isItemSelected = ref(false);
+    const onSelectedUpdate = (newValue) => {
+      selected.value = newValue;
+      isItemSelected.value = selected.value.length > 0;
+    };
+
+    const tabs = ref("wait-tab");
+    const handleTabs = async (tabName) => {
+      tabs.value = tabName;
+      console.log("tabs value after click:", tabs.value);
+      await store.setTab(tabs.value);
+      await clearCheckbox();
+      // await store.getOrderZort();
+      // await clearCheckbox();
+    };
+
+    const afterPrint = async () => {
+      await store.getOrderZort();
+      await handleTabs('success-tab');
+    };
+
     const checkbox = useUtilityStore();
-    const clearCheckbox = () => {
+    const clearCheckbox = async () => {
       checkbox.updateSelectedCheckboxes([]);
     };
 
@@ -288,6 +311,7 @@ export default {
       tabs,
       printReceipt,
       clearCheckbox,
+      afterPrint,
     };
   },
 };

@@ -2,7 +2,7 @@
   <div class="p-4 sm:ml-64">
     <div class="p-4 mt-14">
       <div
-        class="flex flex-col-reverse sm:flex-row justify-end items-center mb-4"
+        class="flex flex-col-reverse sm:flex-row justify-end items-center mb-2"
       >
         <div class="mr-auto">
           <CountOrderErp :data="filteredItems" />
@@ -17,6 +17,9 @@
         <div class="flex items-center sm:order-2 mb-4 sm:mb-0 ml-4">
         <SearchBar :searchBar="textInput" @search="handleSearch" />
       </div>
+      </div>
+      <div class="flex items-center mb-3">
+          <span class="text-xl font-normal"> inv ล่าสุด {{ inv.InvLastno }} </span>
       </div>
 
       <div
@@ -127,7 +130,7 @@
 
 <script>
 import { onMounted, computed, ref } from "vue";
-import { useAuthStore, useOrderStore } from "../../stores";
+import { useAuthStore, useOrderStore, useDashboardStore } from "../../stores";
 import Swal from "sweetalert2";
 import SearchBar from "../../components/searchbar.vue";
 import Table from "../../components/table.vue";
@@ -157,6 +160,11 @@ export default {
     const orders = computed(() => {
       return store.zortOrder;
     });
+    
+    const storeDb = useDashboardStore();
+    const inv = computed(() => {
+      return storeDb.zortDashboard;
+    });
 
     const addOrder = async () => {
       try {
@@ -173,8 +181,9 @@ export default {
           title: "สำเร็จ!",
           text: "นำเข้าระบบสำเร็จ",
         });
-        await store.getOrderZort();
+        await afterAdded();
       } catch (error) {
+        console.log(error);
         Swal.hideLoading();
         Swal.fire({
           icon: "error",
@@ -192,15 +201,15 @@ export default {
     };
 
     const tabs = ref("wait-tab");
-    const handleTabs = (tabName) => {
+    const handleTabs = async (tabName) => {
       tabs.value = tabName;
       console.log("tabs value after click:", tabs.value);
-      store.setTab(tabs.value);
-      printReceipt();
+      await store.setTab(tabs.value);
     };
 
-    const printReceipt = () => {
-      store.getOrderZort();
+    const afterAdded = async () => {
+      await store.getOrderZort();
+      await handleTabs('success-tab');
     };
 
     // search bar start
@@ -225,6 +234,7 @@ export default {
 
     onMounted(() => {
       store.getOrderZort();
+      storeDb.getDashboard();
     });
 
     return {
@@ -239,7 +249,8 @@ export default {
       onSelectedUpdate,
       handleTabs,
       tabs,
-      printReceipt,
+      afterAdded,
+      inv,
     };
   },
 };
