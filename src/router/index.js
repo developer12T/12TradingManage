@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores';
 import zortRoutes from './zort.router'
+import pocoRoutes from './poco.router'
 
 const routes = [
   { path: '/', name: 'Login', component: () => import('../authentication/login.vue') },
   { path: '/home', component: () => import('../views/home.vue') },
   { ...zortRoutes },
+  { ...pocoRoutes },
   {
     path: '/logout',
     name: 'Logout',
