@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-export const usePocoAddItemStore = defineStore("addItem", {
+export const usePocoGetItemStore = defineStore("getItem", {
     state: () => ({
-        pocoAddItem: [],
+        pocoGetItem: [],
     }),
     actions: {
       async getPreItem() {
@@ -17,8 +17,8 @@ export const usePocoAddItemStore = defineStore("addItem", {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
-          this.pocoAddItem = response.data.list;
-          console.log("pocoAddItem", this.pocoAddItem);
+          this.pocoGetItem = response.data.list;
+          console.log("pocoAddItem", this.pocoGetItem);
         } catch (error) {
           console.log(error);
         }
