@@ -6,7 +6,7 @@
           <div class="text-center align-middle">
             <button
                 aria-controls="drawer-navigation"
-                class="inline-flex items-center p-2 pt-0 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                 data-drawer-show="drawer-navigation" data-drawer-target="drawer-navigation"
                 type="button">
               <Icon icon="bi:list" width="24" height="24" />
@@ -14,13 +14,13 @@
           </div>
         </li>
         <li class="mt-2">
-          <a v-if="currentPage === 'dashboard'" class="flex justify-center flex-col items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/dashboard"
+          <a v-if="currentPage === 'dashboard'" class="flex justify-center rounded-lg flex-col items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/dashboard"
              @click="setPage('dashboard')">
             <Icon icon="tabler:home" width="24" height="24" />
             <span style="font-size: 10px">หน้าหลัก</span>
           </a>
 
-          <a v-else class="flex items-center p-2 flex-col justify-center group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/dashboard"
+          <a v-else class="flex items-center p-2 flex-col justify-center rounded-lg group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/dashboard"
              @click="setPage('dashboard')">
             <Icon icon="tabler:home" width="24" height="24" />
             <span style="font-size: 10px">หน้าหลัก</span>
@@ -28,13 +28,13 @@
         </li>
 
         <li>
-          <a v-if="currentPage === 'addProduct'" class="flex flex-col justify-center items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/addProduct"
+          <a v-if="currentPage === 'addProduct'" class="flex flex-col rounded-lg justify-center items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/addProduct"
              @click="setPage('addProduct')">
             <Icon icon="fluent-mdl2:product-variant" width="24" height="24" />
             <span style="font-size: 10px">สินค้า</span>
           </a>
 
-          <a v-else class="flex flex-col items-center p-2 justify-center group text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/addProduct"
+          <a v-else class="flex flex-col items-center p-2 justify-center rounded-lg group text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/addProduct"
              @click="setPage('addProduct')">
             <Icon icon="fluent-mdl2:product-variant" width="24" height="24" />
             <span style="font-size: 10px">สินค้า</span>
@@ -42,13 +42,13 @@
         </li>
 
         <li>
-          <a v-if="currentPage === 'addPO'" class="flex flex-col justify-center items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/addPO"
+          <a v-if="currentPage === 'addPO'" class="flex flex-col justify-center rounded-lg items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/addPO"
              @click="setPage('addPO')">
             <Icon icon="icon-park-outline:transaction-order" width="24" height="24" />
             <span style="font-size: 10px">ใบสั่งซื้อ</span>
           </a>
 
-          <a v-else class="flex flex-col items-center p-2 justify-center group text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/addPO"
+          <a v-else class="flex flex-col items-center p-2 justify-center group rounded-lg text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100" href="/pocoManage/addPO"
              @click="setPage('addPO')">
             <Icon icon="icon-park-outline:transaction-order" width="24" height="24" />
             <span style="font-size: 10px">ใบสั่งซื้อ</span>

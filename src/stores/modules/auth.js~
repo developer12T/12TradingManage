@@ -36,10 +36,10 @@ export const useAuthStore = defineStore("auth", {
     logout() {
       this.user = null;
       this.token = null;
-      // localStorage.removeItem("user");
-      // localStorage.removeItem("token");
-      //
-      // localStorage.removeItem("pocoPage")
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
+      localStorage.removeItem("pocoPage")
       localStorage.clear()
     },
   },

@@ -60,21 +60,27 @@
       <!--        <label class="block mb-2 mt-1 text-sm font-medium text-gray-700 dark:text-white flash-label" for="file_input">*อัพโหลดไฟล์รายการสินค้า-->
       <!--          .xlsx only (MAX. 10MB)</label>-->
       <!--      </div>-->
-      <div class="mb-1.5 mt-12 flex justify-center">
+      <div class="mb-1.5 mt-12 flex justify-start">
         <div>
           <span class="text-sm font-medium ml-8">รายการราคาสินค้าล่าสุดที่อัปเดต วันที่</span><span
             class="text-sm font-medium"> 2023/08/01</span>
         </div>
       </div>
-      <div class="flex justify-end mb-2">
+      <div class="flex justify-between mb-2">
+        <div>
+          <span class="text-sm font-medium ml-8">จำนวนทั้งหมด 10 ชิ้น</span>
+          <span class="text-sm font-medium text-green-600"> พร้อมใช้งาน 7</span>
+          <span class="text-sm font-medium text-red-600"> ไม่พร้อมใช้งาน 3</span>
+        </div>
         <button v-if="dataProduct === null"
-             disabled   class="bg-gray-400 w-32   rounded-lg  ml-2 h-8 py-2 font-medium text-xs text-white  flex items-center justify-center"
+                class="bg-gray-400 w-32   rounded-lg  ml-2 h-8 py-2 font-medium text-xs text-white  flex items-center justify-center"
+                disabled
         >
           อัปเดตสินค้า
         </button>
 
         <button v-else
-                 class="bg-green-500 w-32 hover:bg-green-800  hover:text-gray-200  rounded-lg  ml-2 h-8 py-2 font-medium text-xs text-white hover:!accent-gray-500 flex items-center justify-center"
+                class="bg-green-500 w-32 hover:bg-green-800  hover:text-gray-200  rounded-lg  ml-2 h-8 py-2 font-medium text-xs text-white hover:!accent-gray-500 flex items-center justify-center"
         >
           อัปเดตสินค้า
         </button>
