@@ -15,13 +15,15 @@
               <Icon height="24" icon="bi:list" width="24"/>
             </button>
           </div>
-          <!--          <a class="flex items-center" href="/pocoManage/dashboard">-->
-          <!--            <img alt="12Trading Logo" class="h-8 mr-3" src="/logo-onetwo.png"/>-->
-          <!--            <span-->
-          <!--                class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"-->
-          <!--            >12Trading</span-->
-          <!--            >-->
-          <!--          </a>-->
+          <div class="flex-row flex">
+            <a class="flex items-center ml-8" href="/pocoManage/dashboard">
+              <img alt="12Trading Logo" class="h-8 mr-3" src="/logo-onetwo.png"/>
+              <span
+                  class="self-center text-m font-semibold whitespace-nowrap dark:text-white"
+              >12Trading</span
+              >
+            </a>
+          </div>
 
         </div>
         <div class="flex items-center">

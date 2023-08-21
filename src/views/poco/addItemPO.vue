@@ -23,7 +23,7 @@
 </style>
 <template>
   <div class="p-4 sm:ml-20">
-    <div class="p-4 mt-12">
+    <div class="p-4 mt-0">
       <div class="ml-8">
         <div class="flex-row flex align-middle">
           <label
@@ -52,6 +52,7 @@
           >
             อัปโหลด
           </button>
+          <a href="/pocoManage/addProduct" class="rounded-lg w-32 ml-1 h-8 bg-red-500  hover:bg-red-800  py-2 hover:text-gray-200  font-medium text-xs text-white hover:!accent-gray-500 flex items-center justify-center">เคลียร์</a>
         </div>
 
 
@@ -97,12 +98,29 @@
             </template>
           </TableItem>
           <TableItem v-else :columns=tableColumns :data=dataProduct>
-            <template v-slot:pricePerCTN="{ row }">
-        <span v-if="row.pricePerCTN === null">
-         ไม่มีราคา
-        </span><span v-else>
-         {{ row.pricePerCTN }}
-        </span>
+              <template v-slot:pricePerCTN="{ row }">
+                <span v-if="row.pricePerCTN === null" class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                    ไม่มีราคา
+                </span>
+                <span v-else>
+                    {{ row.pricePerCTN }}
+                </span>
+              </template>
+            <template v-slot:productName="{ row }"  >
+              <div v-if="row.pricePerCTN === null" class="text-start bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                {{row.productName}}
+              </div>
+              <div v-else class="bg-green-100 text-green-800 text-sm text-start font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                {{row.productName}}
+              </div>
+            </template>
+            <template v-slot:productId="{ row }"  >
+              <div v-if="row.pricePerCTN === null" class="text-start bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                {{row.productId}}
+              </div>
+              <div v-else class="bg-green-100 text-green-800 text-sm text-start font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                {{row.productId}}
+              </div>
             </template>
           </TableItem>
         </table>
