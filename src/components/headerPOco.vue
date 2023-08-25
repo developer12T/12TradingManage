@@ -15,7 +15,7 @@
               <Icon height="24" icon="bi:list" width="24"/>
             </button>
           </div>
-          <div class="flex-row flex">
+          <div class="flex-row flex ">
             <a class="flex items-center ml-8" href="/pocoManage/dashboard">
               <img alt="12Trading Logo" class="h-8 mr-3" src="/logo-onetwo.png"/>
               <span

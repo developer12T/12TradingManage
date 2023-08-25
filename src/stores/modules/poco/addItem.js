@@ -11,14 +11,14 @@ export const usePocoAddItemStore = defineStore("addItem", {
                 const token = JSON.parse(localStorage.getItem("token"));
                 const response = await axios.post(
                     import.meta.env.VITE_API_URL +
-                    "/PurchaseCustomerOrder/item/ItemManage/getPreItem",
+                    "/PurchaseCustomerOrder/item/ItemManage/addItemMaster",
                     {},
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 );
                 this.pocoAddItem = response.data.list;
-                console.log("pocoAddItem", this.pocoAddItem);
+                // console.log("pocoAddItem", this.pocoAddItem.count);
             } catch (error) {
                 console.log(error);
             }
