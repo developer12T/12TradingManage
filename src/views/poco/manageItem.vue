@@ -30,11 +30,20 @@
 <template>
   <div class="p-4 sm:ml-20">
     <div class="p-4 mt-1">
-      <div class="mb-1.5 mt-12 flex justify-start">
+      <div class="mb-1.5 mt-12 flex justify-start mb-4">
         <div>
           <span class="text-sm font-medium cursor-default ml-8">รายการราคาสินค้าล่าสุดที่อัปเดต วันที่</span>
           <span v-if="product === undefined" class="text-sm font-medium cursor-default"> ----/--/--</span>
           <span v-else class="text-sm font-medium cursor-default"> : {{ dateLastShow }}</span>
+          <span v-if="product !== null"
+                class="text-sm font-medium cursor-default ml-2">จำนวนทั้งหมด {{
+              product.length
+            }} ชิ้น <span
+                class="bg-green-500 text-red-800 text-xs font-medium mr-1 ml-1  px-2 py-0 rounded-full dark:bg-red-900 dark:text-red-300"></span><span
+                class="text-sm font-medium cursor-default">296 ชิ้น</span> <span
+                class="bg-red-500 text-red-800 text-xs font-medium mr-1 ml-1  px-2 py-0 rounded-full dark:bg-red-900 dark:text-red-300"></span><span
+                class="text-sm font-medium cursor-default">40 ชิ้น</span></span>
+          <span v-else class="text-sm font-medium cursor-default ml-8">จำนวนทั้งหมด 0 ชิ้น</span>
         </div>
       </div>
 
@@ -100,21 +109,45 @@
                 >EX</a
                 >
               </li>
+              <li class="ml-8">
+                <label class="sr-only" for="underline_select">Underline select</label>
+                <select id="underline_select"
+                        class="block py-2.5 px-2 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                  <option selected>เลือกกลุ่มสินค้า</option>
+                  <option value="US">G12 : ผงรสมะนาว</option>
+                  <option value="CA">G13 : น้ำจิ้มไก่</option>
+                  <option value="FR">G03 : น้ำจิ้มไก่</option>
+                  <option value="DE">G02 : ผงทำซุปน้ำใส</option>
+                  <option value="DE">G11 : ผงปรุงรส</option>
+                  <option value="DE">G04 : ผงปรุงรส</option>
+                  <option value="DE">G05 : ผงต้มยำ</option>
+                  <option value="DE">G17 : ผงต้มยำ</option>
+                  <option value="DE">G06 : ผงปรุงรสหมู</option>
+                </select>
+              </li>
             </ul>
-
           </div>
           <div>
             <SearchOrder :searchBar="textInput" @search="handleSearch"/>
           </div>
-          <div class="flex-row flex">
-            <li><span v-if="product !== null"
-                      class="inline-block p-4 border-b-2 border-transparent rounded-t-lg cursor-default">จำนวนทั้งหมด {{
-                product.length
-              }} ชิ้น <span
-                  class="bg-green-500 text-red-800 text-xs font-medium mr-2 ml-2  px-2 py-0 rounded-full dark:bg-red-900 dark:text-red-300"></span>296 ชิ้น<span
-                  class="bg-red-500 text-red-800 text-xs font-medium mr-2 ml-2  px-2 py-0 rounded-full dark:bg-red-900 dark:text-red-300"></span>40 ชิ้น</span>
-              <span v-else class="inline-block p-4 border-b-2 border-transparent rounded-t-lg cursor-default">จำนวนทั้งหมด 0 ชิ้น</span>
-            </li>
+
+          <div class="flex align-middle h-10 ">
+            <button
+                :class="{
+                  ' bg-yellow-300 hover:bg-yellow-200 font-medium rounded-lg text-sm text-center inline-flex items-center px-3 mr-2':formattedDate === 'notup',
+                  ' bg-gray-300 cursor-not-allowed  font-medium rounded-lg text-sm text-center inline-flex items-center px-3 mr-2':formattedDate !== 'notup'
+                }"
+                class="text-white"
+                type="button">
+              <Icon class="mr-1" height="24" icon="material-symbols:update" width="24"/>
+              อัปเดตเป็นเดือนปัจจุุบัน
+            </button>
+            <button
+                class="text-white bg-blue-600 hover:bg-blue-300 font-medium rounded-lg text-sm text-center inline-flex items-center px-3"
+                type="button">
+              <Icon class="mr-1" height="22" icon="icon-park-outline:ad-product" width="22"/>
+              เปิดใช้งานสินค้าทั้งหมด
+            </button>
           </div>
         </ul>
       </div>
@@ -178,12 +211,12 @@
           <div class="flex justify-center m-5 mb-0">
             <Icon class="animate-bounce mb-1 text-yellow-400" height="120" icon="fe:warning" width="120"/>
           </div>
-          <span class="ml-5 mr-5 font-medium text-xl">ข้อมูลเดือนอัปเดตล่าสุดไม่ตรงกับเดือนปัจจุบัน</span>
+          <span class="ml-5 mr-5 font-medium text-xl">ข้อมูลเดือนที่อัปเดตล่าสุดไม่ตรงกับเดือนปัจจุบัน</span>
           <div class="flex justify-center mt-5">
             <button
-                @click="nexts('aa')"
                 class="text-white bg-blue-600 hover:bg-blue-400 hover:text-gray-50 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900"
-                type="button">
+                type="button"
+                @click="nexts('aa')">
               ดำเนินการต่อ
             </button>
           </div>
@@ -210,7 +243,7 @@ export default {
   },
   setup() {
     const currentDate = new Date();
-
+    const datevalid = ref('')
     const formattedDate = `${currentDate.getFullYear()}-${padNumber(
         currentDate.getMonth() + 1
     )}-${padNumber(currentDate.getDate())}`;
@@ -251,7 +284,11 @@ export default {
       const keyword = textInput.value.toLowerCase();
       return product.value.filter(
           (item) =>
-              item.productName.toLowerCase().includes(keyword)
+              item.productName.toLowerCase().includes(keyword) ||
+              item.group.toLowerCase().includes(keyword) ||
+              item.statusActive12T.toLowerCase().includes(keyword) ||
+              item.statusActiveFplus.toLowerCase().includes(keyword) ||
+              item.productId.toLowerCase().includes(keyword)
       );
     });
 
@@ -283,8 +320,9 @@ export default {
       console.log("tabs value after click:", tabs.value);
 
     };
-    
+
     if (dateLast.value !== formattedDate) {
+      datevalid.value = 'notup'
       showAlert.value = true
     }
 
@@ -302,6 +340,8 @@ export default {
     };
 
     return {
+      datevalid,
+      formattedDate,
       nexts,
       filteredItems,
       dateLastShow,

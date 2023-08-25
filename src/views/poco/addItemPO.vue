@@ -129,6 +129,22 @@
                 >EX</a
                 >
               </li>
+              <li class="ml-8">
+                <label class="sr-only" for="underline_select">Underline select</label>
+                <select id="underline_select"
+                        class="block py-2.5 px-2 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                  <option selected>เลือกกลุ่มสินค้า</option>
+                  <option value="US">G12 : ผงรสมะนาว</option>
+                  <option value="CA">G13 : น้ำจิ้มไก่</option>
+                  <option value="FR">G03 : น้ำจิ้มไก่</option>
+                  <option value="DE">G02 : ผงทำซุปน้ำใส</option>
+                  <option value="DE">G11 : ผงปรุงรส</option>
+                  <option value="DE">G04 : ผงปรุงรส</option>
+                  <option value="DE">G05 : ผงต้มยำ</option>
+                  <option value="DE">G17 : ผงต้มยำ</option>
+                  <option value="DE">G06 : ผงปรุงรสหมู</option>
+                </select>
+              </li>
             </ul>
 
           </div>
