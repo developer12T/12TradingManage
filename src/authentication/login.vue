@@ -69,22 +69,35 @@
   </section>
 </template>
 <script>
-import { useAuthStore } from "../stores";
-import Swal from "sweetalert2";
+import { ref,onMounted } from 'vue';
+import { useAuthStore } from '../stores';
+import router from '../router';
+
 export default {
-  data() {
-    return {
-      userLogin: "",
-      passwordLogin: "",
-      isPasswordInvalid: false,
-    };
+  props: {
+    id: String,
+    required: true,
   },
-  methods: {
-    async SignIn() {
+  setup(props) {
+    const userLogin = ref('');
+    const passwordLogin = ref('');
+    const isPasswordInvalid = ref(false);
+
+    const SignIn = async () => {
       const authStore = useAuthStore();
-      await authStore.login(this.userLogin, this.passwordLogin);
-      this.$router.push("/onlineManage");
-    },
+      await authStore.login(userLogin.value, passwordLogin.value);
+      // this.$router.push('/');
+      router.push(`/${props.id}`);
+    };
+    onMounted(() => {
+      console.log(props.id);
+    });
+    return {
+      userLogin,
+      passwordLogin,
+      isPasswordInvalid,
+      SignIn,
+    };
   },
 };
 </script>
