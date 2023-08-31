@@ -117,13 +117,13 @@
           <!-- Modal content -->
           <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
-            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+            <div class="flex items-start justify-between p-2 pl-4 border-b rounded-t dark:border-gray-600">
+              <h3 class="text-md font-semibold text-gray-900 dark:text-white">
                 แก้ไขข้อมูลผู้ใช้งาน
               </h3>
               <button
                   class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-hide="staticModal"
+                  @click="closeModal"
                   type="button">
                 <Icon height="28" icon="heroicons:x-mark-20-solid" width="28"/>
                 <span class="sr-only">Close modal</span>
@@ -244,11 +244,12 @@ export default {
       console.log(role.value)
       console.log(userErp.value)
       await getUser.addUserData(userId.value, userErp.value, warehouse.value, role.value)
-      await getUser.getUserData();
+
       userId.value = ''
       warehouse.value = ''
       role.value = ''
       userErp.value = ''
+      await getUser.getUserData();
     }
 
     const editUser = (userId, userErp, warehouse, role) => {
