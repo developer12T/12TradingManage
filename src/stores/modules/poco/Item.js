@@ -31,5 +31,57 @@ export const usePocoGetItemMasterStore = defineStore("getItemMaster", {
           console.log(error);
         }
       },
+        async updateStatus(){
+            try {
+                const token = JSON.parse(localStorage.getItem("token"));
+                const responseUpdate = await axios.put(
+                    import.meta.env.VITE_API_URL +
+                    "/PurchaseCustomerOrder/item/ItemManage/updateStatus",
+                    {},
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async updateStatusByItem(productId,status){
+            try {
+                const pid = productId
+                const st = status
+                const token = JSON.parse(localStorage.getItem("token"));
+                const responseUpdate = await axios.put(
+                    import.meta.env.VITE_API_URL +
+                    "/PurchaseCustomerOrder/item/ItemManage/updateStatusByItem",
+                    {
+                        productid:pid,
+                        status:st
+                    },
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async updateDate(){
+            try {
+                const token = JSON.parse(localStorage.getItem("token"));
+                const responseUpdate = await axios.put(
+                    import.meta.env.VITE_API_URL +
+                    "/PurchaseCustomerOrder/item/ItemManage/upDateLast",
+                    {
+                    },
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
     },
   });

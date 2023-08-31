@@ -20,7 +20,7 @@ button:hover .icon {
   transition: transform 0.3s ease;
 }
 
-.rotate-icon.rotate  {
+.rotate-icon.rotate {
   transform: rotate(90deg);
 }
 
@@ -117,7 +117,19 @@ button:hover .icon {
                        @click="handlePage('addPO')"
           >
             <Icon class="icon" height="24" icon="icon-park-outline:transaction-order" width="24"/>
-            <span style="font-size: 10px">จัดการ</span></router-link>
+            <span style="font-size: 10px">ใบสั่งซื้อ</span></router-link>
+          <router-link :class="{
+                'flex justify-center rounded-lg flex-col items-center p-2 active:text-blue-500 group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
+                  pageName === 'addUser',
+                'flex items-center p-2 flex-col justify-center active:text-blue-500 rounded-lg group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
+                  pageName !== 'addUser',
+              }"
+                       aria-current="page"
+                       to="/pocoManage/addUser"
+                       @click="handlePage('addUser')"
+          >
+            <Icon icon="tdesign:user" width="24" height="24" class="icon" />
+            <span style="font-size: 10px">ตั้งค่าผู้ใช้</span></router-link>
         </li>
       </ul>
     </div>
@@ -169,17 +181,17 @@ button:hover .icon {
                 'flex cursor-pointer items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName !== 'addProduct' && pageName !== 'manageItem',
               }"
-            @click="rotate(activesIcon)"
               aria-controls="dropdownStock2"
               data-collapse-toggle="dropdownStock2"
               type="button"
+              @click="rotate(activesIcon)"
           >
             <Icon class="icon-right" height="24" icon="fluent-mdl2:product-variant" width="24"/>
             <span class="ml-3  icon-right">จัดการสินค้า</span>
-            <Icon  height="24" icon="mingcute:down-fill" :class="{
+            <Icon :class="{
               'ml-12 ':activesIcon === 'down',
               'ml-12 rotate-90':activesIcon === 'up'
-            }" width="24"/>
+            }" height="24" icon="mingcute:down-fill" width="24"/>
           </a>
           <ul id="dropdownStock2"
               class="py-2 space-y-2 hidden">
@@ -228,6 +240,19 @@ button:hover .icon {
             <Icon class="icon-right" height="24" icon="icon-park-outline:transaction-order" width="24"/>
             <span class="ml-3 icon-right">จัดการใบสั่งซื้อ</span></router-link>
 
+          <router-link :class="{
+                'flex items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
+                  pageName === 'addUser',
+                'flex items-center p-2  group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
+                  pageName !== 'addUser',
+              }"
+                       aria-current="page"
+                       to="/pocoManage/addUser"
+                       @click="handlePage('addUser')"
+          >
+            <Icon class="icon-right" height="24" icon="tdesign:user" width="24"/>
+            <span class="ml-3 icon-right">จัดการผู้ใช้งาน</span></router-link>
+
         </li>
 
       </ul>
@@ -236,7 +261,7 @@ button:hover .icon {
 </template>
 
 <script>
-import {onMounted, ref,computed} from "vue";
+import {onMounted, ref} from "vue";
 import {initCollapses, initDrawers} from "flowbite";
 import {Icon} from '@iconify/vue';
 import {usePageStore} from '../../stores'
@@ -258,10 +283,10 @@ export default {
       initDrawers();
     });
 
-   const pageName2 = localStorage.getItem("pocoPage" || '')
-    if(pageName2 === null){
+    const pageName2 = localStorage.getItem("pocoPage" || '')
+    if (pageName2 === null) {
 
-    }else{
+    } else {
       pageName.value = pageName2
     }
     const handlePage = async (pageNames) => {
@@ -272,9 +297,9 @@ export default {
     };
 
     const rotate = (act) => {
-      if(act === 'down'){
+      if (act === 'down') {
         activesIcon.value = 'up'
-      }else if(act === 'up'){
+      } else if (act === 'up') {
         activesIcon.value = 'down'
       }
     }

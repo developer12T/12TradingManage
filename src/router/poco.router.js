@@ -7,5 +7,6 @@ export default {
         { path: '/pocoManage/addProduct', component: () => import('../views/poco/addItemPO.vue') },
         { path: '/pocoManage/addPO', component: () => import('../views/poco/addPO.vue') },
         { path: '/pocoManage/manageItem', component: () => import('../views/poco/manageItem.vue') },
+        { path: '/pocoManage/addUser', component: () => import('../views/poco/addUser.vue') },
     ]
 };

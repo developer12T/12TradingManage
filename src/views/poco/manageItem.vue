@@ -110,20 +110,7 @@
                 >
               </li>
               <li class="ml-8">
-                <label class="sr-only" for="underline_select">Underline select</label>
-                <select id="underline_select"
-                        class="block py-2.5 px-2 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                  <option selected>เลือกกลุ่มสินค้า</option>
-                  <option value="US">G12 : ผงรสมะนาว</option>
-                  <option value="CA">G13 : น้ำจิ้มไก่</option>
-                  <option value="FR">G03 : น้ำจิ้มไก่</option>
-                  <option value="DE">G02 : ผงทำซุปน้ำใส</option>
-                  <option value="DE">G11 : ผงปรุงรส</option>
-                  <option value="DE">G04 : ผงปรุงรส</option>
-                  <option value="DE">G05 : ผงต้มยำ</option>
-                  <option value="DE">G17 : ผงต้มยำ</option>
-                  <option value="DE">G06 : ผงปรุงรสหมู</option>
-                </select>
+                <SelectOption :searchBar="textInput" @search="handleSearch"/>
               </li>
             </ul>
           </div>
@@ -133,9 +120,10 @@
 
           <div class="flex align-middle h-10 ">
             <button
+                @click="updateDate"
                 :class="{
-                  ' bg-yellow-300 hover:bg-yellow-200 font-medium rounded-lg text-sm text-center inline-flex items-center px-3 mr-2':formattedDate === 'notup',
-                  ' bg-gray-300 cursor-not-allowed  font-medium rounded-lg text-sm text-center inline-flex items-center px-3 mr-2':formattedDate !== 'notup'
+                  ' bg-yellow-300 hover:bg-yellow-200 font-medium rounded-lg text-sm text-center inline-flex items-center px-3 mr-2':formattedDate !== 'notup',
+                  ' bg-gray-300 cursor-not-allowed  font-medium rounded-lg text-sm text-center inline-flex items-center px-3 mr-2':formattedDate === 'notup'
                 }"
                 class="text-white"
                 type="button">
@@ -143,8 +131,9 @@
               อัปเดตเป็นเดือนปัจจุุบัน
             </button>
             <button
-                class="text-white bg-blue-600 hover:bg-blue-300 font-medium rounded-lg text-sm text-center inline-flex items-center px-3"
-                type="button">
+                class="text-white bg-green-600 hover:bg-green-400 font-medium rounded-lg text-sm text-center inline-flex items-center px-3"
+                type="button"
+                @click="updateAllItem">
               <Icon class="mr-1" height="22" icon="icon-park-outline:ad-product" width="22"/>
               เปิดใช้งานสินค้าทั้งหมด
             </button>
@@ -193,12 +182,25 @@
                 {{ row.productName }}
               </div>
             </template>
-            <template v-slot:productId2="{ row }">
-              <label class="relative inline-flex items-center mr-5 cursor-pointer">
-                <input checked class="sr-only peer" type="checkbox" value="">
-                <div
-                    class="w-11 h-6 bg-red-200 rounded-full peer dark:bg-red-700 peer-focus:ring-4 peer-focus:ring-red-100 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-              </label>
+            <template v-slot:status="{ row }">
+              <button v-if="row.pricePerCTN === null"
+                      class="focus:outline-none cursor-not-allowed text-white bg-red-700 hover:bg-red-800 font-medium rounded-md text-xs px-3 py-0.5 dark:bg-red-600 dark:hover:bg-red-700 "
+                      type="button" disabled
+                   >
+                กรุณาแก้ไข
+              </button>
+              <button v-else-if="row.status === '0'"
+                      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 font-medium rounded-md text-xs px-3 py-0.5 dark:bg-red-600 dark:hover:bg-red-700 "
+                      type="button"
+                      @click="updateItem(row.productId,row.status)">
+                off
+              </button>
+              <button v-else-if="row.status === '1'"
+                      class="focus:outline-none text-white bg-green-600 hover:bg-green-800 font-medium rounded-md text-xs px-3 py-0.5 dark:bg-red-600 dark:hover:bg-red-700 "
+                      type="button"
+                      @click="updateItem(row.productId,row.status)">
+                on
+              </button>
             </template>
           </TableItem>
         </table>
@@ -214,7 +216,7 @@
           <span class="ml-5 mr-5 font-medium text-xl">ข้อมูลเดือนที่อัปเดตล่าสุดไม่ตรงกับเดือนปัจจุบัน</span>
           <div class="flex justify-center mt-5">
             <button
-                class="text-white bg-blue-600 hover:bg-blue-400 hover:text-gray-50 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900"
+                class="text-white bg-blue-600 hover:bg-blue-800 hover:text-gray-50 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900"
                 type="button"
                 @click="nexts('aa')">
               ดำเนินการต่อ
@@ -233,6 +235,8 @@ import TableItem from '../../components/table.vue';
 import {Icon} from '@iconify/vue';
 
 import SearchOrder from "../../components/searchbar.vue";
+import SelectOption from "../../components/selectoption.vue";
+import Swal from "sweetalert2";
 
 
 export default {
@@ -240,6 +244,7 @@ export default {
     SearchOrder,
     TableItem,
     Icon,
+    SelectOption
   },
   setup() {
     const currentDate = new Date();
@@ -252,7 +257,7 @@ export default {
       return number.toString().padStart(2, '0');
     }
 
-    console.log(formattedDate)
+
     const tableColumns = computed(() => {
       return [
         {id: 'channel', title: 'ช่องทาง'},
@@ -262,7 +267,7 @@ export default {
         {id: 'pricePerCTN', title: 'ราคาต่อหีบ'},
         {id: 'statusActive12T', title: 'สถานะ 12T'},
         {id: 'statusActiveFplus', title: 'สถานะ Fplus'},
-        {id: 'productId2', title: '#'},
+        {id: 'status', title: '#'},
       ];
     });
     const store = usePocoGetItemMasterStore();
@@ -275,13 +280,29 @@ export default {
       return getDate.getDateLast;
     })
 
+    //option
+    // const yearsList = ref([])
+    // const selectedYear = ref(null)
+    //
+    // const getYearsList = () => {
+    //   const startYear = 1990;
+    //   const endYear = new Date().getFullYear();
+    //   for (let i = endYear; i >= startYear; i--) {
+    //     yearsList.value = [...yearsList.value, i]
+    //   }
+    // }
+
+
     // search bar start
-    const textInput = ref("");
+    const textInput = ref('');
+
     const filteredItems = computed(() => {
       if (!textInput.value) {
         return product.value;
       }
+
       const keyword = textInput.value.toLowerCase();
+
       return product.value.filter(
           (item) =>
               item.productName.toLowerCase().includes(keyword) ||
@@ -296,14 +317,145 @@ export default {
       textInput.value = searchText;
       console.log(searchText)
     };
+    const updateItem = async (productId,status) => {
+      if(status === '0'){
+        var textstatsu = 'เปิด'
+      }else{
+        var textstatsu = 'ปิด'
+      }
+
+      try {
+        Swal.fire({
+          title: `ยืนยันการ${textstatsu}ใช้งาน`,
+          text: "กรุณากดยืนยันเพื่อดำเนินการต่อ",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#0E9F6E',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'ยกเลิก',
+          confirmButtonText: 'ยืนยัน',
+          customClass: {
+            icon: 'custom-icon-class',
+            popup: 'custom-popup-class',
+            title: 'custom-title-class',
+            content: 'custom-content-class',
+            text: 'custom-content-class',
+            confirmButton: 'custom-confirm-button-class',
+            cancelButton: 'custom-cancel-button-class',
+          },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              Swal.fire({
+                icon: "info",
+                title: "กำลังอัปเดตข้อมูล",
+                text: "กรุณารอสักครู่...",
+                showConfirmButton: false,
+                allowOutsideClick: false,
+              });
+              await store.updateStatusByItem(productId,status)
+              Swal.fire(
+                  'อัปเดตสำเร็จ',
+                  'อัปเดตข้อมูลสินค้าสำเร็จ',
+                  'success'
+              ).then(async (result) => {
+                if (result.isConfirmed) {
+                  // await store.getItemMaster() ;
+                  await store.getItemMaster()
+                  // location.reload();
+                }
+              })
+
+            } catch (error) {
+              Swal.hideLoading();
+              Swal.fire({
+                icon: "error",
+                title: "เกิดข้อผิดพลาด!",
+                text: "ไม่สามารถพิมพ์ได้",
+              });
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+
+
+
+    };
+
+    const updateDate = async () => {
+
+      try {
+        Swal.fire({
+          title: `ยืนยันการอัปเดตวันที่`,
+          text: "กรุณากดยืนยันเพื่อดำเนินการต่อ",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#0E9F6E',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'ยกเลิก',
+          confirmButtonText: 'ยืนยัน',
+          customClass: {
+            icon: 'custom-icon-class',
+            popup: 'custom-popup-class',
+            title: 'custom-title-class',
+            content: 'custom-content-class',
+            text: 'custom-content-class',
+            confirmButton: 'custom-confirm-button-class',
+            cancelButton: 'custom-cancel-button-class',
+          },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              Swal.fire({
+                icon: "info",
+                title: "กำลังอัปเดตข้อมูล",
+                text: "กรุณารอสักครู่...",
+                showConfirmButton: false,
+                allowOutsideClick: false,
+              });
+              await store.updateDate() ;
+              Swal.fire(
+                  'อัปเดตสำเร็จ',
+                  'อัปเดตข้อมูลสินค้าสำเร็จ',
+                  'success'
+              ).then(async (result) => {
+                if (result.isConfirmed) {
+                  // await store.getItemMaster() ;
+                  await store.getItemMaster()
+                  // location.reload();
+                }
+              })
+
+            } catch (error) {
+              Swal.hideLoading();
+              Swal.fire({
+                icon: "error",
+                title: "เกิดข้อผิดพลาด!",
+                text: "ไม่สามารถพิมพ์ได้",
+              });
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+
+
+
+    };
+
+    // onMounted(() => {
+    //   getYearsList()
+    // })
+
 
     onMounted(() => {
       store.getItemMaster();
+      getDate.getDateData();
     });
 
-    onMounted(() => {
-      getDate.getDateData();
-    })
 
     const dateLastShow = dateLast
     const tabs = ref("all");
@@ -321,15 +473,79 @@ export default {
 
     };
 
+    const updateAllItem = async () => {
+      try {
+        Swal.fire({
+          title: 'ยืนยันการเปิดใช้งาน',
+          text: "กรุณากดยืนยันเพื่อดำเนินการต่อ",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#0E9F6E',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'ยกเลิก',
+          confirmButtonText: 'ยืนยัน',
+          customClass: {
+            icon: 'custom-icon-class',
+            popup: 'custom-popup-class',
+            title: 'custom-title-class',
+            content: 'custom-content-class',
+            text: 'custom-content-class',
+            confirmButton: 'custom-confirm-button-class',
+            cancelButton: 'custom-cancel-button-class',
+          },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              Swal.fire({
+                icon: "info",
+                title: "กำลังอัปเดตข้อมูล",
+                text: "กรุณารอสักครู่...",
+                showConfirmButton: false,
+                allowOutsideClick: false,
+              });
+              await store.updateStatus();
+              Swal.fire(
+                  'อัปเดตสำเร็จ',
+                  'อัปเดตข้อมูลสินค้าสำเร็จ',
+                  'success'
+              ).then(async (result) => {
+                if (result.isConfirmed) {
+                    // await store.getItemMaster() ;
+                  const product = computed(() => {
+                    return store.pocoGetItemMaster;
+                  });
+                  await store.getItemMaster()
+                  // location.reload();
+                }
+              })
+
+            } catch (error) {
+              Swal.hideLoading();
+              Swal.fire({
+                icon: "error",
+                title: "เกิดข้อผิดพลาด!",
+                text: "ไม่สามารถพิมพ์ได้",
+              });
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
+    console.log('fort1 : '+formattedDate)
     if (dateLast.value !== formattedDate) {
+      console.log('last2 : '+dateLast.value)
+      console.log('fort2 : '+formattedDate)
       datevalid.value = 'notup'
       showAlert.value = true
     }
 
+
     const nexts = (vale) => {
       showAlert.value = false
     }
-
 
     const displayFileName = (event) => {
       if (event.target.files.length > 0) {
@@ -340,6 +556,9 @@ export default {
     };
 
     return {
+      // selectedYear,
+      // yearsList,
+      updateAllItem,
       datevalid,
       formattedDate,
       nexts,
@@ -356,7 +575,9 @@ export default {
       showAlert,
       uploadStatus,
       dataProduct,
+      updateItem,
       displayFileName,
+      updateDate
     };
   },
 };
