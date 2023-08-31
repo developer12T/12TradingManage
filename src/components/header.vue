@@ -1,78 +1,69 @@
 <template>
   <nav
-    class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+      class="fixed top-0 z-40 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
   >
-    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+    <div class="px-3 py-2 lg:px-5 lg:pl-3">
+
       <div class="flex items-center justify-between">
-        <div class="flex items-center justify-start">
-          <button
-            data-drawer-target="logo-sidebar"
-            data-drawer-toggle="logo-sidebar"
-            aria-controls="logo-sidebar"
-            type="button"
-            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          >
-            <span class="sr-only">Open sidebar</span>
-            <svg
-              class="w-6 h-6"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-              ></path>
-            </svg>
-          </button>
-          <a href="/onlineManage" class="flex items-center">
-            <img src="/logo-onetwo.png" class="h-8 mr-3" alt="12Trading Logo" />
-            <span
-              class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
+        <div class="flex justify-start">
+          <div class="text-center">
+            <button
+                aria-controls="drawer-navigation"
+                class="inline-flex items-center p-2 pt-0 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                data-drawer-show="drawer-navigation" data-drawer-target="drawer-navigation"
+                type="button">
+              <Icon height="24" icon="bi:list" width="24"/>
+            </button>
+          </div>
+          <div class="flex-row flex ">
+            <a class="flex items-center ml-8" href="/pocoManage/dashboard">
+              <img alt="12Trading Logo" class="h-8 mr-3" src="/logo-onetwo.png"/>
+              <span
+                  class="self-center text-m font-semibold whitespace-nowrap dark:text-white"
               >12Trading</span
-            >
-          </a>
+              >
+            </a>
+          </div>
+
         </div>
         <div class="flex items-center">
           <div class="flex items-center ml-3">
             <div>
               <button
-                type="button"
-                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                aria-expanded="false"
-                data-dropdown-toggle="dropdown-user"
+                  aria-expanded="false"
+                  class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  data-dropdown-toggle="dropdown-user"
+                  type="button"
               >
                 <span class="sr-only">Open user menu</span>
                 <img
-                  class="w-8 h-8 rounded-full"
-                  src="/user.png"
-                  alt="user photo"
+                    alt="user photo"
+                    class="w-8 h-8 rounded-full"
+                    src="/user.png"
                 />
               </button>
             </div>
             <div
-              class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-              id="dropdown-user"
+                id="dropdown-user"
+                class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
             >
               <div class="px-4 py-3" role="none">
                 <span
-                  class="block text-sm text-gray-900 dark:text-white text-center"
-                  ><div v-if="user">{{ user.fullname }}</div></span
+                    class="block text-sm text-gray-900 dark:text-white text-center"
+                ><div v-if="user">{{ user.fullname }}</div></span
                 >
                 <span
-                  class="block text-sm text-gray-500 truncate dark:text-gray-400 text-center"
-                  >12Trading</span
+                    class="block text-sm text-gray-500 truncate dark:text-gray-400 text-center"
+                >12Trading</span
                 >
               </div>
               <ul class="py-1" role="none">
                 <li>
                   <a
-                    href="/logout"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                    >Sign out</a
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                      href="/logout"
+                      role="menuitem"
+                  >Sign out</a
                   >
                 </li>
               </ul>
@@ -82,6 +73,7 @@
       </div>
     </div>
   </nav>
+
 </template>
 
 
@@ -89,8 +81,12 @@
 import {onMounted} from "vue";
 import {initDropdowns} from "flowbite";
 import {useAuthStore} from "../stores";
+import {Icon} from '@iconify/vue';
 
 export default {
+  components: {
+    Icon
+  },
   setup() {
     onMounted(() => {
       initDropdowns();
