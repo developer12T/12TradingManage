@@ -1,6 +1,6 @@
 <template>
   <nav aria-label="Page navigation example">
-    <ul class="flex items-center -space-x-px h-10 text-base ml-5">
+    <ul class="flex items-center -space-x-px h-10 text-base">
       <li v-if="currentPage > 1">
         <button
           @click="changePage(currentPage - 1)"
