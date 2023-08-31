@@ -8,7 +8,7 @@
 import { useAuthStore } from '../../stores';
 // import { useRouter } from 'vue-router'
 import router from "../../router";
-import Header from '../../components/headerPOco.vue';
+import Header from '../../components/header.vue';
 import SidebarOnline from './sidebar.vue';
 import {computed, onMounted} from "vue";
 
