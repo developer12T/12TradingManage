@@ -31,21 +31,20 @@
               <Icon icon="gridicons:product" width="24"/>
               รายการสินค้า 339 รายการ
             </div>
-            <div class="flex justify- mt-1 mb-1 m-2">
+            <div class="flex justify-between mt-1 mb-1 m-2">
               <div class="w-1/2" >
-                <SelectOption :searchBar="textInput" @search="handleSearch"/>
+                <SelectOption :searchBar="textInput" @search="handleSearch" :data="dataSelect"/>
               </div>
               <searchbar :searchBar="textInput" @search="handleSearch"></searchbar>
             </div>
-            <div class="bg-gray-500 flex justify-center m-2 mt-0 h-[550px] overflow-y-scroll">
-              <table class="w-full  text-sm text-left text-gray-500 dark:text-gray-400">
+            <div class="bg-white-500 m-2 mt-0 h-[550px] overflow-y-scroll">
+              <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <TableItem :columns="tableColumns" :data="filteredItems">
                   <template v-slot:productName="{ row }">
                     <div class="text-start">
                       {{ row.productName }}
                     </div>
                   </template>
-
                   <template v-slot:status="{ row }">
                     <div class="flex justify-center items-center">
                       <button
@@ -124,12 +123,12 @@ import TableItem from '../../components/table.vue';
 import TableCart from '../../components/table.vue';
 import Table from '../../components/table.vue';
 import searchbar from "../../components/searchbar.vue";
+import SearchOrder from "../../components/searchbar.vue";
 import {computed, onMounted, ref} from "vue";
 import {usePocoGetItemMasterStore, useUserStore} from '../../stores';
 import {Icon} from '@iconify/vue';
 import Swal from 'sweetalert2'
 import SelectOption from "../../components/selectoption.vue";
-import SearchOrder from "../../components/searchbar.vue";
 
 export default {
   components: {
@@ -151,6 +150,17 @@ export default {
         {id: 'productName', title: 'ชิ่อสินค้า'},
         {id: 'pricePerCTN', title: 'ราคาต่อหีบ'},
         {id: 'status', title: '#'},
+      ];
+    });
+
+    const dataSelect = computed(() => {
+      return [
+        {value: 'G01', name: 'G01 :'},
+        {value: 'G02', name: 'G02 :'},
+        {value: 'G03', name: 'G03 :'},
+        {value: 'G04', name: 'G04 :'},
+        {value: 'G06', name: 'G06 :'},
+        {value: 'G07', name: 'G07 :'},
       ];
     });
 
@@ -183,7 +193,7 @@ export default {
     const addCart = async (idproduct) => {
       console.log(idproduct)
       Swal.fire({
-        title: 'จำวนวนสินค้า',
+        title: 'จำนวนสินค้า',
         input: 'text',
         inputAttributes: {
           autocapitalize: 'off'
@@ -191,6 +201,7 @@ export default {
         showCancelButton: true,
         cancelButtonText: 'ยกเลิก',
         confirmButtonText: 'ยืนยัน',
+        confirmButtonColor:'#28A745',
         showLoaderOnConfirm: true,
         preConfirm: async (login) => {
           return await storeUser.addCartData(idproduct, login);
@@ -219,7 +230,7 @@ export default {
 
 
     // search bar start
-    const textInput = ref("");
+    const textInput = ref('');
     const filteredItems = computed(() => {
       if (!textInput.value) {
         return product.value;
@@ -227,6 +238,8 @@ export default {
       const keyword = textInput.value.toLowerCase();
       return product.value.filter(
           (item) =>
+              item.channel.toLowerCase().includes(keyword) ||
+              item.group.toLowerCase().includes(keyword) ||
               item.productId.toLowerCase().includes(keyword) ||
               item.productName.toLowerCase().includes(keyword)
       );
@@ -239,6 +252,7 @@ export default {
 
 
     return {
+      dataSelect,
       textInput,
       filteredItems,
       cart,
