@@ -1,8 +1,8 @@
 <template>
     <Header></Header>
     <SidebarCn></SidebarCn>
-    <div class="p-4 sm:ml-64">
-    <div class="p-4 mt-14">
+    <div class="p-4 sm:ml-20">
+    <div class="p-4 mt-12">
       <routerView />
     </div>
   </div>

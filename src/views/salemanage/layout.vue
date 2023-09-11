@@ -11,7 +11,8 @@
 <script>
 import { useAuthStore } from '../../stores';
 import router from '../../router';
-import HeaderSlm from '../../components/header.vue';
+// import HeaderSlm from '../../components/header.vue';
+import HeaderSlm from '../salemanage/header.vue';
 import SidebarSlm from './sidebar.vue';
 export default {
   components: {

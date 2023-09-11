@@ -204,7 +204,8 @@ export default {
 
     const tableColumns = computed(() => {
       return [
-        { id: "createdatetime", title: "วันที่" },
+        { id: "createdatetime", title: "วันที่ออเดอร์" },
+        { id: "printdatetime", title: "วันที่พิมพ์" },
         { id: "number", title: "รายการ" },
         { id: "customer", title: "ลูกค้า" },
         { id: "amount", title: "มูลค่า" },

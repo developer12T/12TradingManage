@@ -1,12 +1,11 @@
 <template>
     <Header></Header>
     <SidebarOnline></SidebarOnline>
-    <routerView />
+    <router-view />
 </template>
 
 <script>
 import { useAuthStore } from '../../stores';
-// import { useRouter } from 'vue-router'
 import router from "../../router";
 import Header from '../../components/header.vue';
 import SidebarOnline from './sidebar.vue';

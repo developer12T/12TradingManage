@@ -9,9 +9,6 @@ a:hover .icon-right {
   transition: transform 0.3s ease;
 }
 
-button:hover .icon {
-}
-
 .icon-right {
   transition: transform 0.3s ease;
 }
