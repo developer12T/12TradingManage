@@ -26,109 +26,121 @@ a:hover .icon-right {
   <aside id="default-sidebar"
          aria-label="Sidebar"
          class="fixed top-0 left-0 z-40 w-20 h-screen transition-transform -translate-x-full sm:translate-x-0">
-    <div class="h-full px-3 py-3 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-      <ul class="space-y-2 font-medium">
-        <li>
-          <div class="text-center align-middle">
-            <button
-                aria-controls="drawer-navigation"
-                class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                data-drawer-show="drawer-navigation" data-drawer-target="drawer-navigation"
-                type="button">
-              <Icon height="24" icon="bi:list" width="24"/>
-            </button>
-          </div>
-        </li>
-        <li class="mt-2">
-          <router-link :class="{
+    <div class="h-full px-3 py-3 bg-gray-50 dark:bg-gray-800 flex flex-col justify-between">
+
+      <div>
+        <ul class="space-y-2 font-medium">
+          <li>
+            <div class="text-center align-middle">
+              <button
+                  aria-controls="drawer-navigation"
+                  class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                  data-drawer-show="drawer-navigation" data-drawer-target="drawer-navigation"
+                  type="button">
+                <Icon height="24" icon="bi:list" width="24"/>
+              </button>
+            </div>
+          </li>
+          <li class="mt-2">
+            <router-link :class="{
                 'flex justify-center rounded-lg flex-col items-center p-2 active:text-blue-500 group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName === 'dashboard',
                 'flex items-center p-2 flex-col justify-center active:text-blue-500 rounded-lg group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName !== 'dashboard',
               }"
-                       aria-current="page"
-                       to="/pocoManage/dashboard"
-                       @click="handlePage('dashboard')"
-          >
-            <Icon class="icon" height="24" icon="tabler:home" width="24"/>
-            <span style="font-size: 10px">หน้าหลัก</span></router-link>
-        </li>
+                         aria-current="page"
+                         to="/pocoManage/dashboard"
+                         @click="handlePage('dashboard')"
+            >
+              <Icon class="icon" height="24" icon="tabler:home" width="24"/>
+              <span style="font-size: 10px">หน้าหลัก</span></router-link>
+          </li>
 
-        <!--   test     -->
-        <li>
-          <a
-              :class="{
+          <!--   test     -->
+          <li>
+            <a
+                :class="{
                 'flex flex-col items-center cursor-pointer w-full p-2 text-base text-blue-700 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName === 'addProduct' || pageName === 'manageItem',
                 'flex flex-col  items-center w-full p-2 cursor-pointer text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName !== 'addProduct' && pageName !== 'manageItem',
               }"
-              aria-controls="dropdownStock"
-              data-collapse-toggle="dropdownStock"
-              type="button"
-          >
-            <Icon class="icon" height="24" icon="fluent-mdl2:product-variant" width="24"/>
-            <span class="flex-1 text-xs text-center whitespace-nowrap">สินค้า</span>
-            <Icon height="16" icon="mingcute:down-fill" width="16"/>
-          </a>
-          <ul id="dropdownStock"
-              class="py-2 space-y-2">
-            <li>
-              <router-link :class="{
+                aria-controls="dropdownStock"
+                data-collapse-toggle="dropdownStock"
+                type="button"
+            >
+              <Icon class="icon" height="24" icon="fluent-mdl2:product-variant" width="24"/>
+              <span class="flex-1 text-xs text-center whitespace-nowrap">สินค้า</span>
+              <Icon height="16" icon="mingcute:down-fill" width="16"/>
+            </a>
+            <ul id="dropdownStock"
+                class="py-2 space-y-2">
+              <li>
+                <router-link :class="{
                 'flex justify-center rounded-lg flex-col items-center p-2 active:text-blue-500 group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName === 'addProduct',
                 'flex items-center p-2 flex-col justify-center active:text-blue-500 rounded-lg group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName !== 'addProduct',
               }"
-                           aria-current="page"
-                           to="/pocoManage/addProduct"
-                           @click="handlePage('addProduct')"
-              >
-                <Icon class="icon" height="24" icon="icon-park-outline:excel" width="24"/>
-                <span style="font-size: 10px">อัปไฟล์</span></router-link>
-            </li>
-            <li>
-              <router-link :class="{
+                             aria-current="page"
+                             to="/pocoManage/addProduct"
+                             @click="handlePage('addProduct')"
+                >
+                  <Icon class="icon" height="24" icon="icon-park-outline:excel" width="24"/>
+                  <span style="font-size: 10px">อัปไฟล์</span></router-link>
+              </li>
+              <li>
+                <router-link :class="{
                 'flex justify-center rounded-lg flex-col items-center p-2 active:text-blue-500 group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName === 'manageItem',
                 'flex items-center p-2 flex-col justify-center active:text-blue-500 rounded-lg group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName !== 'manageItem',
               }"
-                           aria-current="page"
-                           to="/pocoManage/manageItem"
-                           @click="handlePage('manageItem')"
-              >
-                <Icon class="icon" height="24" icon="uil:setting" width="24"/>
-                <span style="font-size: 10px">จัดการ</span></router-link>
-            </li>
-          </ul>
+                             aria-current="page"
+                             to="/pocoManage/manageItem"
+                             @click="handlePage('manageItem')"
+                >
+                  <Icon class="icon" height="24" icon="uil:setting" width="24"/>
+                  <span style="font-size: 10px">จัดการ</span></router-link>
+              </li>
+            </ul>
 
-          <router-link :class="{
+            <router-link :class="{
                 'flex justify-center rounded-lg flex-col items-center p-2 active:text-blue-500 group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName === 'addPO',
                 'flex items-center p-2 flex-col justify-center active:text-blue-500 rounded-lg group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName !== 'addPO',
               }"
-                       aria-current="page"
-                       to="/pocoManage/addPO"
-                       @click="handlePage('addPO')"
-          >
-            <Icon class="icon" height="24" icon="icon-park-outline:transaction-order" width="24"/>
-            <span style="font-size: 10px">ใบสั่งซื้อ</span></router-link>
-          <router-link :class="{
+                         aria-current="page"
+                         to="/pocoManage/addPO"
+                         @click="handlePage('addPO')"
+            >
+              <Icon class="icon" height="24" icon="icon-park-outline:transaction-order" width="24"/>
+              <span style="font-size: 10px">ใบสั่งซื้อ</span></router-link>
+            <router-link :class="{
                 'flex justify-center rounded-lg flex-col items-center p-2 active:text-blue-500 group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName === 'addUser',
                 'flex items-center p-2 flex-col justify-center active:text-blue-500 rounded-lg group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName !== 'addUser',
               }"
-                       aria-current="page"
-                       to="/pocoManage/addUser"
-                       @click="handlePage('addUser')"
-          >
-            <Icon icon="tdesign:user" width="24" height="24" class="icon" />
-            <span style="font-size: 10px">ตั้งค่าผู้ใช้</span></router-link>
-        </li>
-      </ul>
+                         aria-current="page"
+                         to="/pocoManage/addUser"
+                         @click="handlePage('addUser')"
+            >
+              <Icon class="icon" height="24" icon="tdesign:user" width="24"/>
+              <span style="font-size: 10px">ตั้งค่าผู้ใช้</span></router-link>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <a
+            class="flex flex-col justify-center items-center p-2 text-gray-700 hover:bg-gray-100"
+            href="/logout"
+            role="menuitem"
+        >
+          <Icon :horizontalFlip="true" class="icon" height="24" icon="majesticons:door-exit" width="24"/>
+          <span style="font-size: 10px">ออกระบบ</span></a>
+      </div>
     </div>
   </aside>
 
@@ -137,122 +149,139 @@ a:hover .icon-right {
        aria-labelledby="drawer-navigation-label"
        class="fixed top-0 left-0 pt-2 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800"
        tabindex="-1">
-    <div class="flex flex-row pt-0">
-      <button aria-controls="drawer-navigation"
-              class="text-gray-400 bg-transparent pr-4 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              data-drawer-hide="drawer-navigation"
-              type="button">
-        <Icon height="24" icon="bi:list" width="24"/>
-        <span class="sr-only">Close menu</span>
-      </button>
-      <a class="flex items-center" href="/pocoManage/dashboard">
-        <img alt="12Trading Logo" class="h-8 mr-3" src="/logo-onetwo.png"/>
-        <span
-            class="self-center text-m font-medium whitespace-nowrap dark:text-white"
-        >12Trading</span
-        >
-      </a>
-    </div>
-    <div class="py-4 overflow-y-auto flex flex-col ">
-      <ul class="space-y-2 font-medium">
-        <li>
-          <router-link :class="{
+    <div class="flex flex-col justify-between h-full">
+      <div class=" pt-0">
+        <div class="flex flex-row justify-between">
+          <a aria-controls="drawer-navigation" class="flex cursor-pointer items-center"
+             data-drawer-hide="drawer-navigation">
+            <img alt="12Trading Logo" class="h-8 mr-3" src="/logo-onetwo.png"/>
+            <span
+                class="self-center text-m font-medium whitespace-nowrap dark:text-white"
+            >12Trading</span
+            >
+          </a>
+          <button aria-controls="drawer-navigation"
+                  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-drawer-hide="drawer-navigation"
+                  type="button">
+            <Icon height="24" icon="bi:list" width="24"/>
+            <span class="sr-only">Close menu</span>
+          </button>
+        </div>
+
+        <div class="flex-col flex">
+          <ul class="space-y-2 font-medium">
+            <li>
+              <router-link :class="{
                 'flex items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName === 'dashboard',
                 'flex items-center p-2  group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName !== 'dashboard',
               }"
-                       aria-current="page"
-                       to="/pocoManage/dashboard"
-                       @click="handlePage('dashboard')"
-          >
-            <Icon class="icon-right" height="24" icon="tabler:home" width="24"/>
-            <span class="ml-3 icon-right">หน้าหลัก</span></router-link>
-        </li>
-        <!--        test -->
-        <li>
-          <a
-              :class="{
+                           aria-current="page"
+                           to="/pocoManage/dashboard"
+                           @click="handlePage('dashboard')"
+              >
+                <Icon class="icon-right" height="24" icon="tabler:home" width="24"/>
+                <span class="ml-3 icon-right">หน้าหลัก</span></router-link>
+            </li>
+            <!--        test -->
+            <li>
+              <a
+                  :class="{
                 'flex cursor-pointer items-center w-full p-2  text-base text-blue-600 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName === 'addProduct' || pageName === 'manageItem',
                 'flex cursor-pointer items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName !== 'addProduct' && pageName !== 'manageItem',
               }"
-              aria-controls="dropdownStock2"
-              data-collapse-toggle="dropdownStock2"
-              type="button"
-              @click="rotate(activesIcon)"
-          >
-            <Icon class="icon-right" height="24" icon="fluent-mdl2:product-variant" width="24"/>
-            <span class="ml-3  icon-right">จัดการสินค้า</span>
-            <Icon :class="{
+                  aria-controls="dropdownStock2"
+                  data-collapse-toggle="dropdownStock2"
+                  type="button"
+                  @click="rotate(activesIcon)"
+              >
+                <Icon class="icon-right" height="24" icon="fluent-mdl2:product-variant" width="24"/>
+                <span class="ml-3  icon-right">จัดการสินค้า</span>
+                <Icon :class="{
               'ml-12 ':activesIcon === 'down',
               'ml-12 rotate-90':activesIcon === 'up'
             }" height="24" icon="mingcute:down-fill" width="24"/>
-          </a>
-          <ul id="dropdownStock2"
-              class="py-2 space-y-2 hidden">
-            <li>
-              <router-link :class="{
+              </a>
+              <ul id="dropdownStock2"
+                  class="py-2 space-y-2 hidden">
+                <li>
+                  <router-link :class="{
                 'flex items-center w-full p-2 text-blue-600 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName === 'addProduct',
                 'flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName !== 'addProduct',
               }"
-                           aria-current="page"
-                           to="/pocoManage/addProduct"
-                           @click="handlePage('addProduct')"
-              >
-                <Icon class="icon mr-2" height="24" icon="icon-park-outline:excel" width="24"/>
-                อัปโหลดไฟล์
-              </router-link>
-            </li>
-            <li>
-              <router-link :class="{
+                               aria-current="page"
+                               to="/pocoManage/addProduct"
+                               @click="handlePage('addProduct')"
+                  >
+                    <Icon class="icon mr-2" height="24" icon="icon-park-outline:excel" width="24"/>
+                    อัปโหลดไฟล์
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :class="{
                 'flex items-center w-full p-2 text-blue-600 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName === 'manageItem',
                 'flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700':
                   pageName !== 'manageItem',
               }"
-                           aria-current="page"
-                           to="/pocoManage/manageItem"
-                           @click="handlePage('manageItem')"
-              >
-                <Icon class="icon mr-2" height="24" icon="uil:setting" width="24"/>
-                จัดการสินค้า
-              </router-link>
-            </li>
-          </ul>
+                               aria-current="page"
+                               to="/pocoManage/manageItem"
+                               @click="handlePage('manageItem')"
+                  >
+                    <Icon class="icon mr-2" height="24" icon="uil:setting" width="24"/>
+                    จัดการสินค้า
+                  </router-link>
+                </li>
+              </ul>
 
-          <router-link :class="{
+              <router-link :class="{
                 'flex items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName === 'addPO',
                 'flex items-center p-2  group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName !== 'addPO',
               }"
-                       aria-current="page"
-                       to="/pocoManage/addPO"
-                       @click="handlePage('addPO')"
-          >
-            <Icon class="icon-right" height="24" icon="icon-park-outline:transaction-order" width="24"/>
-            <span class="ml-3 icon-right">จัดการใบสั่งซื้อ</span></router-link>
+                           aria-current="page"
+                           to="/pocoManage/addPO"
+                           @click="handlePage('addPO')"
+              >
+                <Icon class="icon-right" height="24" icon="icon-park-outline:transaction-order" width="24"/>
+                <span class="ml-3 icon-right">จัดการใบสั่งซื้อ</span></router-link>
 
-          <router-link :class="{
+              <router-link :class="{
                 'flex items-center p-2  group text-blue-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName === 'addUser',
                 'flex items-center p-2  group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100':
                   pageName !== 'addUser',
               }"
-                       aria-current="page"
-                       to="/pocoManage/addUser"
-                       @click="handlePage('addUser')"
-          >
-            <Icon class="icon-right" height="24" icon="tdesign:user" width="24"/>
-            <span class="ml-3 icon-right">จัดการผู้ใช้งาน</span></router-link>
+                           aria-current="page"
+                           to="/pocoManage/addUser"
+                           @click="handlePage('addUser')"
+              >
+                <Icon class="icon-right" height="24" icon="tdesign:user" width="24"/>
+                <span class="ml-3 icon-right">จัดการผู้ใช้งาน</span></router-link>
 
-        </li>
+            </li>
 
-      </ul>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <a
+            class="flex items-center p-2  group text-gray-800-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-100"
+            href="/logout"
+            role="menuitem"
+        >
+          <Icon :horizontalFlip="true" class="icon-right" height="24" icon="majesticons:door-exit" width="24"/>
+          <span class="ml-3 icon-right">ออกจากระบบ</span></a>
+      </div>
+
     </div>
   </div>
 </template>

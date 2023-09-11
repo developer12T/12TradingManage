@@ -1,29 +1,25 @@
 <template>
   <nav aria-label="Page navigation example">
-    <ul class="flex items-center -space-x-px h-10 text-base">
+    <ul class="flex items-center  -space-x-px h-10 text-base">
       <li v-if="currentPage > 1">
         <button
           @click="changePage(currentPage - 1)"
           class="flex items-center justify-center px-3 h-8 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
-          </svg>
-           Prev
+          <Icon icon="line-md:arrow-up" width="16" :rotate="3" class="mr-1" />
+           ย้อนกลับ
         </button>
       </li>
       <li>
         <span class="mr-3">
-          Page {{ currentPage }} of {{ totalPages }}
+          หน้า {{ currentPage }} จาก {{ totalPages }}
         </span>
       </li>
       <li v-if="currentPage < totalPages">
         <button
           @click="changePage(currentPage + 1)"
           class="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            Next
-          <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-          </svg>
+            ถัดไป
+          <Icon icon="line-md:arrow-up" width="16" :rotate="1" class="ml-1" />
         </button>
       </li>
     </ul>
@@ -31,7 +27,13 @@
 </template>
 
 <script>
+
+import {Icon} from "@iconify/vue";
+
 export default {
+  components:{
+    Icon
+  },
   props: {
     currentPage: {
       type: Number,

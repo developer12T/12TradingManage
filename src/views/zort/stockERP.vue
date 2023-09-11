@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 sm:ml-64">
+  <div class="p-4 sm:ml-24">
     <div class="p-4 mt-14">
       <div
         class="flex flex-col-reverse sm:flex-row justify-end items-center mb-4"
@@ -13,7 +13,8 @@
           <Count :data="filteredItems" />
         </div>
       </div>
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div class="bg-gray-500 flex justify-center m-2 mt-0 h-[450px] overflow-y-scroll">
+        <table class="w-full  text-sm text-left text-gray-500 dark:text-gray-400">
         <Table :columns="tableColumns" :data="paginatedData">
           <template v-slot:available="{ row }">
             <div class="flex items-center justify-center">
@@ -32,6 +33,7 @@
             </div>
           </template>
         </Table>
+        </table>
       </div>
     </div>
     <PaginateStockErp

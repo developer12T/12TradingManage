@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 sm:ml-64">
+  <div class="p-4 sm:ml-24">
     <div class="p-4 mt-14">
       <div
         class="flex flex-col-reverse sm:flex-row justify-end items-center mb-4"
@@ -30,15 +30,26 @@
         </div>
       </div>
 
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div class="bg-gray-500 flex justify-center m-2 mt-0 h-[450px] overflow-y-scroll">
+        <table class="w-full  text-sm text-left text-gray-500 dark:text-gray-400">
         <Table :columns="tableColumns" :data="paginatedData">
           <template v-slot:name="{ row }">
             <div class="flex items-center justify-start">
               {{ row.name }}
             </div>
           </template>
+          <template v-slot:sellprice="{ row }">
+            <div class="text-right">
+              {{ row.sellprice }}
+            </div>
+          </template>
+          <template v-slot:stock="{ row }">
+            <div class="text-right">
+              {{ row.stock }}
+            </div>
+          </template>
           <template v-slot:availablestock="{ row }">
-            <div class="flex items-center justify-center">
+            <div class="text-center">
               <span
                 v-if="row.availablestock > 0"
                 class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
@@ -54,6 +65,7 @@
             </div>
           </template>
         </Table>
+        </table>
       </div>
     </div>
     <Pagination

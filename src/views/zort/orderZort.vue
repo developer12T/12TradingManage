@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 sm:ml-64">
+  <div class="p-4 sm:ml-24">
     <div class="p-4 mt-14">
       <div
         class="flex flex-col-reverse sm:flex-row justify-end items-center mb-4"
@@ -17,8 +17,8 @@
             selected
           "
           target="_blank"
-          class="bg-green-500 hover:bg-green-600 text-white border border-green-500 hover:border-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-2 sm:mb-0 dark:bg-green-600 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-700 dark:focus:ring-green-800 sm:ml-4"
-          :class="{ 'pointer-events-none': !isItemSelected }"
+          class="text-white hover:border-green-600 font-medium rounded-lg text-sm px-5 py-2 text-center mb-2 sm:mb-0 sm:ml-4"
+         :class="{ 'cursor-not-allowed  pointer-events-none bg-gray-500': !isItemSelected,'bg-green-500 hover:bg-green-600':isItemSelected }"
         >
           พิมพ์ใบเสร็จ
           {{ selected.length > 0 ? selected.length + " ใบ" : "" }}
@@ -73,7 +73,8 @@
         </ul>
       </div>
 
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div class="bg-gray-500 flex justify-center m-2 mt-0 h-[450px] overflow-y-scroll">
+        <table class="w-full  text-sm text-left text-gray-500 dark:text-gray-400">
         <TableOrder
           :columns="tableColumns"
           :data="filteredItems"
@@ -87,23 +88,10 @@
 
                 <div
                   v-if="row.invstatus !== ''"
-                  class="text-blue-800 text-xs font-medium ml-0 px-1 py-0.5 rounded-full dark:text-blue-300"
+                  class="text-blue-800 text-xs flex flex-row font-medium ml-0 px-1 py-0.5 rounded-full dark:text-blue-300"
                 >
-                  <svg
-                    class="w-3 h-3 text-gray-800 dark:text-white mr-1 inline-flex"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 19 18"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13.583 5.445h.01M8.86 16.71l-6.573-6.63a.993.993 0 0 1 0-1.4l7.329-7.394A.98.98 0 0 1 10.31 1l5.734.007A1.968 1.968 0 0 1 18 2.983v5.5a.994.994 0 0 1-.316.727l-7.439 7.5a.975.975 0 0 1-1.385.001Z"
-                    />
-                  </svg>
+
+                 <Icon icon="ph:tag-fill" color="#3f83f8" width="18" :rotate="1"/>
                   {{ row.invstatus }}
                 </div>
               </span>
@@ -177,6 +165,7 @@
             </div>
           </template>
         </TableOrder>
+        </table>
       </div>
     </div>
   </div>
@@ -190,11 +179,15 @@ import router from "../../router";
 import CountOrder from "./orderCount.vue";
 import SearchOrder from "../../components/searchbar.vue";
 import TableOrder from "../../components/tableCheckbox.vue";
+import { Icon } from "@iconify/vue";
+import Table from "../../components/table.vue";
 export default {
   components: {
+    Table,
     CountOrder,
     SearchOrder,
     TableOrder,
+    Icon
   },
   setup() {
     const authStore = useAuthStore();

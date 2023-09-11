@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 sm:ml-64">
+  <div class="p-4 sm:ml-24">
     <div class="p-4 mt-14">
       <div
         class="flex flex-col-reverse sm:flex-row justify-end items-center mb-2"
@@ -7,19 +7,21 @@
         <div class="mr-auto">
           <CountOrderErp :data="filteredItems" />
         </div>
-        <button
-          @click="addOrder()"
-          type="button"
-          class="bg-green-500 hover:bg-green-600 text-white border border-green-500 hover:border-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-2 sm:mb-0 dark:bg-green-600 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-700 dark:focus:ring-green-800 sm:ml-4"
-        >
-          นำเข้าระบบ
-        </button>
-        <div class="flex items-center sm:order-2 mb-4 sm:mb-0 ml-4">
-        <SearchBar :searchBar="textInput" @search="handleSearch" />
+
       </div>
-      </div>
-      <div class="flex items-center mb-3">
-          <span class="text-xl font-normal"> inv ล่าสุด {{ inv.InvLastno }} </span>
+      <div class="flex items-center justify-between mb-3">
+        <div> <span class="text-xl font-[500]"> Inv ล่าสุด</span> <span class="font-bold text-xl">{{ inv.InvLastno }}</span> </div>
+        <div class="flex flex-row">
+          <button
+              @click="addOrder()"
+              type="button"
+              class="bg-green-500 hover:bg-green-600 mr-2 text-white border border-green-500 hover:border-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center mb-2 sm:mb-0 dark:bg-green-600 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-700 dark:focus:ring-green-800 sm:ml-4"
+          >
+            นำเข้าระบบ
+          </button>
+          <SearchBar :searchBar="textInput" @search="handleSearch" />
+        </div>
+
       </div>
 
       <div
@@ -30,9 +32,9 @@
             <a
               @click="handleTabs('wait-tab')"
               :class="{
-                'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500':
+                'inline-block p-3 cursor-pointer text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500':
                   tabs === 'wait-tab',
-                'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
+                'inline-block cursor-pointer p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
                   tabs !== 'wait-tab',
               }"
               aria-current="page"
@@ -43,9 +45,9 @@
             <a
               @click="handleTabs('success-tab')"
               :class="{
-                'inline-block p-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500':
+                'inline-block p-3 cursor-pointer text-blue-600 border-b-2 border-blue-600 rounded-t-lg  dark:text-blue-500 dark:border-blue-500':
                   tabs === 'success-tab',
-                'inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
+                'inline-block p-3 cursor-pointer border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-500 dark:hover:text-gray-300':
                   tabs !== 'success-tab',
               }"
               >นำเข้าระบบสำเร็จ</a
@@ -54,75 +56,78 @@
         </ul>
       </div>
 
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <Table :columns="tableColumns" :data="filteredItems">
-          <template v-slot:status="{ row }">
-            <div class="flex items-center justify-center">
+      <div class="bg-gray-500 flex justify-center m-2 mt-0 h-[450px] overflow-y-scroll">
+        <table class="w-full  text-sm text-left text-gray-500 dark:text-gray-400">
+          <Table :columns="tableColumns" :data="filteredItems">
+            <template v-slot:status="{ row }">
+              <div class="flex items-center justify-center">
               <span
-                v-if="row.status === 'Success'"
-                class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
+                  v-if="row.status === 'Success'"
+                  class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
               >
                 {{ row.status }}
               </span>
-              <span
-                v-if="row.status === 'Pending'"
-                class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
-              >
+                <span
+                    v-if="row.status === 'Pending'"
+                    class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                >
                 {{ row.status }}
               </span>
-              <span
-                v-if="row.status === 'Voided'"
-                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
-              >
+                <span
+                    v-if="row.status === 'Voided'"
+                    class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
+                >
                 {{ row.status }}
               </span>
-              <span
-                v-if="row.status === 'Waiting'"
-                class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300"
-              >
+                <span
+                    v-if="row.status === 'Waiting'"
+                    class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300"
+                >
                 {{ row.status }}
               </span>
-            </div>
-          </template>
-          <template v-slot:paymentstatus="{ row }">
-            <div class="flex items-center justify-center">
+              </div>
+            </template>
+            <template v-slot:paymentstatus="{ row }">
+              <div class="flex items-center justify-center">
               <span
-                v-if="row.paymentstatus === 'Paid'"
-                class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
+                  v-if="row.paymentstatus === 'Paid'"
+                  class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
               >
                 {{ row.paymentstatus }}
               </span>
-              <span
-                v-if="row.paymentstatus === 'Pending'"
-                class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
-              >
+                <span
+                    v-if="row.paymentstatus === 'Pending'"
+                    class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                >
                 {{ row.paymentstatus }}
               </span>
-              <span
-                v-if="row.paymentstatus === 'Voided'"
-                class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
-              >
+                <span
+                    v-if="row.paymentstatus === 'Voided'"
+                    class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
+                >
                 {{ row.paymentstatus }}
               </span>
-            </div>
-          </template>
-          <template v-slot:saleschannel="{ row }">
-            <div class="flex items-center justify-center">
-              <img
-                v-if="row.saleschannel === 'Shopee'"
-                src="/shopee-icon.png"
-                width="25"
-                class="mr-1"
-              />
-              <img
-                v-else-if="row.saleschannel === 'Lazada'"
-                src="/lazada-icon.png"
-                width="25"
-                class="mr-1"
-              />
-            </div>
-          </template>
-        </Table>
+              </div>
+            </template>
+            <template v-slot:saleschannel="{ row }">
+              <div class="flex items-center justify-center">
+                <img
+                    v-if="row.saleschannel === 'Shopee'"
+                    src="/shopee-icon.png"
+                    width="25"
+                    class="mr-1"
+                />
+                <img
+                    v-else-if="row.saleschannel === 'Lazada'"
+                    src="/lazada-icon.png"
+                    width="25"
+                    class="mr-1"
+                />
+              </div>
+            </template>
+          </Table>
+        </table>
+
       </div>
     </div>
   </div>

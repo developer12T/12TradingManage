@@ -16,9 +16,9 @@
     </thead>
     <tbody >
       <tr v-if="data === null || data === undefined || data.length === 0"
-        class="bg-white  cursor-default border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+        class="bg-white cursor-default border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
       >
-        <td  class="px-6 py-4 text-center" colspan="8">
+        <td  class="px-6 py-4 text-center" :colspan="columns.length" >
           ไม่พบข้อมูล
         </td>
       </tr>
