@@ -4,6 +4,7 @@ import axios from "axios";
 export const usePocoGetItemMasterStore = defineStore("getItemMaster", {
     state: () => ({
         pocoGetItemMaster: [],
+        pocoGetItemMasterAvailable: [],
         tabName:'all'
     }),
     actions: {
@@ -81,7 +82,26 @@ export const usePocoGetItemMasterStore = defineStore("getItemMaster", {
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+        async getItemAvailable() {
+            try {
+                const token = JSON.parse(localStorage.getItem("token"));
+                const response = await axios.post(
+                    import.meta.env.VITE_API_URL +
+                    "/PurchaseCustomerOrder/item/ItemManage/getItemAvailable",
+                    {
+                    },
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+                this.pocoGetItemMasterAvailable = response.data;
+                // console.log("pocoGETItem", this.pocoGetItem);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
 
     },
   });

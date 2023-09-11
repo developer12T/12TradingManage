@@ -3,7 +3,7 @@
     <div
       class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
     >
-      <Icon icon="line-md:search-twotone" :rotate="3" height="24" width="24" />
+      <Icon icon="line-md:search" width="20" />
     </div>
     <input
       type="text"

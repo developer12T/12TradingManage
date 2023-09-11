@@ -102,12 +102,10 @@
                   off
                 </button>
               </div>
-
             </template>
           </TableItem>
         </table>
       </div>
-
       <!-- Main modal -->
       <div v-if="isModal" id="staticModal" aria-hidden="true"
            class="fixed  flex justify-center items-center backdrop-brightness-50 top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
@@ -123,8 +121,8 @@
               </h3>
               <button
                   class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  @click="closeModal"
-                  type="button">
+                  type="button"
+                  @click="closeModal">
                 <Icon height="28" icon="heroicons:x-mark-20-solid" width="28"/>
                 <span class="sr-only">Close modal</span>
               </button>
@@ -136,7 +134,8 @@
                   <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="first_name">รหัสพนักงาน</label>
                   <input id="first_name"
                          :value="userIdModal"
-                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""
+                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                         placeholder=""
                          required type="text">
                 </div>
                 <div>
@@ -144,7 +143,8 @@
                     (อ้างอิง M3)</label>
                   <input id="last_name"
                          :value="userErpModal"
-                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-"
+                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                         placeholder="-"
                          required type="text">
                 </div>
                 <div>
@@ -152,7 +152,8 @@
                          for="company">รหัสคลัง</label>
                   <input id="company"
                          :value="warehouseModal"
-                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-"
+                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                         placeholder="-"
                          required type="text">
                 </div>
                 <div>
@@ -160,7 +161,8 @@
                          for="phone">สิทธิการใช้งาน</label>
                   <input id="phone"
                          :value="roleModal"
-                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" pattern="-"
+                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                         pattern="-"
                          placeholder="-" required type="text">
                 </div>
               </div>
@@ -175,9 +177,9 @@
                 บันทึก
               </button>
               <button
-                  @click="closeModal"
                   class="text-gray-500 bg-white hover:bg-gray-100 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                  type="button">
+                  type="button"
+                  @click="closeModal">
                 ปิดหน้าต่าง
               </button>
             </div>
