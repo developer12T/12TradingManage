@@ -130,7 +130,7 @@
                 >
               </li>
               <li class="ml-8">
-                <SelectOption :searchBar="textInput" @search="handleSearch"/>
+                <SelectOption :searchBar="textInput" @search="handleSearch" :data="dataSelect"/>
               </li>
             </ul>
           </div>
@@ -349,6 +349,14 @@ export default {
       getDate.getDateData();
     })
 
+    const dataSelect = computed(() => {
+      return [
+        {value: 'CR', name: 'CR'},
+        {value: 'EX', name: 'EX'},
+        {value: 'ID', name: 'ID'},
+      ];
+    });
+
     const dateLastShow = dateLast
     const tabs = ref("all");
     const fileName = ref(null);
@@ -521,6 +529,7 @@ export default {
     };
 
     return {
+      dataSelect,
       handleSearch,
       textInput,
       handleTabs,
