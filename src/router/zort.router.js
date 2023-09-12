@@ -9,6 +9,7 @@ export default {
         { path: '/onlineManage/order/reciept', component: () => import('../views/zort/orderZort.vue') },
         { path: '/onlineManage/order/erp', component: () => import('../views/zort/orderZortErp.vue') },
         { path: '/onlineManage/stock/zort', component: () => import('../views/zort/stockZort.vue') },
-        { path: '/onlineManage/stock/erp', component: () => import('../views/zort/stockERP.vue') }
+        { path: '/onlineManage/stock/erp', component: () => import('../views/zort/stockERP.vue') },
+        { path: '/onlineManage/pdfExport', component: () => import('../views/zort/printReceipt.vue') },
     ]
 };

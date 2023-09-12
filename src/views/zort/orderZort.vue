@@ -10,6 +10,7 @@
         <div class="flex items-center sm:order-1 mb-4 sm:mb-0 ml-4">
           <SearchOrder :searchBar="textInput" @search="handleSearch" />
         </div>
+        <router-link :to="{ path: '/onlineManage/pdfExport', query: { dataList:selected } }" target="_blank" class="bg-yellow-200">ทดสอบระบบพิมพ์</router-link>
         <a
           @click="printReceipt()"
           :href="
@@ -73,7 +74,7 @@
         </ul>
       </div>
 
-      <div class="bg-gray-500 flex justify-center m-2 mt-0 h-[450px] overflow-y-scroll">
+      <div class=" flex justify-center m-2 mt-0 h-[450px] overflow-y-scroll">
         <table class="w-full  text-sm text-left text-gray-500 dark:text-gray-400">
         <TableOrder
           :columns="tableColumns"

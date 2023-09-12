@@ -8,7 +8,7 @@
           v-for="col in columns"
           :key="col.id"
           scope="col"
-          class="px-6 cursor-default py-3 text-center"
+          class="px-6 cursor-default py-3 sticky bg-gray-50 top-0 text-center"
         >
           {{ col.title }}
         </th>

@@ -2,11 +2,11 @@
   <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
-        <th class="px-6 py-3">
+        <th class="px-6 py-3 sticky top-0 bg-gray-50">
           <input type="checkbox" :checked="selectAll" @change="setSelectAll($event.target.checked)"
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+            class="w-4 sticky top-0 bg-gray-50  h-4 text-blue-600  border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
         </th>
-        <th v-for="col in columns" :key="col.id" scope="col" class="px-6 py-3 text-center">
+        <th v-for="col in columns" :key="col.id" scope="col" class="px-6 sticky top-0 bg-gray-50 py-3 text-center">
           {{ col.title }}
         </th>
       </tr>
