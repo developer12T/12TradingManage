@@ -194,7 +194,7 @@ export default {
                 to="/onlineManage/dashboard"
                 @click="handlePage('dashboard')"
             >
-              <Icon class="icon" height="24" icon="tabler:home" width="24"/>
+              <Icon class="icon" height="24" icon="line-md:home-md" width="24"/>
               <span style="font-size: 10px">หน้าหลัก</span></router-link
             >
           </li>
@@ -385,11 +385,10 @@ export default {
             <Icon
               class="icon-right"
               height="24"
-              icon="tabler:home"
+              icon="line-md:home-md"
               width="24"
             />
-            <span class="ml-3 icon-right">หน้าหลัก</span></router-link
-          >
+            <span class="ml-3 icon-right">หน้าหลัก</span></router-link>
         </li>
 
         <li>

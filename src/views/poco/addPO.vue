@@ -310,7 +310,7 @@ export default {
               return await storeUser.addCartData(idproduct, countt);
             } else {
               Swal.showValidationMessage('กรุณากรอกตัวเลขเท่านั้น');
-            } 
+            }
           }
         },
         allowOutsideClick: () => !Swal.isLoading()
