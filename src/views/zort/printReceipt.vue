@@ -27,7 +27,7 @@ export default {
     //     return number.toString().padStart(2, '0');
     //   }
     //
-    //   const idlist = ['121060155', '119993270']
+    //   const idlist = ['124239971']
     //   const dataPrint = []
     //   for (let i = 0; i < idlist.length; i++) {
     //     const headData = ref(null);
